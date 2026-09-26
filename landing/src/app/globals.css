@@ -8,12 +8,6 @@
   --on-accent: #f6f9fd;
 }
 
-html.light {
-  --background: #f6f9fd;
-  --foreground: #0d0d0d;
-  --on-accent: #f6f9fd;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -32,10 +26,6 @@ html {
   background: var(--background);
 }
 
-html.light {
-  color-scheme: light;
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
@@ -47,11 +37,3 @@ body {
   color: var(--foreground);
 }
 
-html.light .hero-copy-wash {
-  background: linear-gradient(
-    to right,
-    var(--background) 0%,
-    color-mix(in srgb, var(--background) 70%, transparent) 48%,
-    transparent 100%
-  );
-}

@@ -5,7 +5,7 @@ export default function Hero() {
   return (
     <section className="relative isolate min-h-[calc(100svh-4.25rem)] overflow-hidden">
       <div className="absolute inset-0 z-[2]">
-        <AsciiCity />
+        <AsciiCity detail />
       </div>
       <div className="hero-copy-wash pointer-events-none absolute inset-y-0 left-0 z-[3] w-[min(100%,48rem)]" />
 
@@ -18,7 +18,7 @@ export default function Hero() {
 
           <p className="mt-7 max-w-lg text-base leading-7 text-foreground/90 sm:text-lg sm:leading-8">
             Partnering with universities to deliver an integrated suite of
-            skilling solutions, from classrooms to careers.
+            skilling solutions, from classrooms to organizations.
           </p>
 
           <div className="mt-9">

@@ -3,14 +3,13 @@
 import { useCallback, useEffect, useRef, type PointerEvent } from "react";
 import AsciiCity from "@/components/AsciiCity";
 import CtaLink from "@/components/CtaLink";
-import ThemeToggle from "@/components/ThemeToggle";
 
 const nav = [
   { href: "/", label: "Home" },
-  { href: "#about", label: "About" },
-  { href: "#projects", label: "Projects" },
-  { href: "#partners", label: "Partners" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#about", label: "About" },
+  { href: "/#projects", label: "Projects" },
+  { href: "/#partners", label: "Partners" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 const FOLLOW_X = 18;
@@ -72,69 +71,53 @@ function FooterHands() {
     return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
-  useEffect(() => {
-    const scene = sceneRef.current;
-    if (!scene) return;
-    const sync = () => {
-      scene.style.setProperty("--scene-h", `${scene.clientHeight}px`);
-    };
-    sync();
-    const ro = new ResizeObserver(sync);
-    ro.observe(scene);
-    return () => ro.disconnect();
-  }, []);
-
   return (
     <div
       ref={sceneRef}
-      className="relative mt-8 h-[min(72svh,44rem)] w-full overflow-hidden sm:mt-12 lg:mt-0 lg:h-[min(86svh,52rem)]"
+      className="relative mt-8 h-[min(90svh,56rem)] w-full overflow-hidden sm:mt-12 lg:mt-0 lg:h-[min(104svh,64rem)]"
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
     >
-      <div className="pointer-events-none absolute inset-0 z-20 flex">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[min(21.6svh,13.2rem)] z-20 flex justify-between lg:top-[min(25.8svh,15.6rem)]">
         <div
           ref={leftRef}
-          className="relative h-full w-1/2 will-change-transform"
+          className="relative h-full w-[38%] will-change-transform"
         >
-          <div className="absolute bottom-0 left-0 h-[min(var(--scene-h,72svh),calc(50vw*3/2))] w-[min(50vw,calc(var(--scene-h,72svh)*2/3))]">
-            <AsciiCity
-              src="/ascii-hand-left.png"
-              cropX={0.5}
-              cropY={1}
-              fit="contain"
-              knockout
-              className="h-full w-full cursor-pointer pointer-events-auto"
-            />
-          </div>
+          <AsciiCity
+            src="/ascii-hand-left.png"
+            cropX={0}
+            cropY={1}
+            fit="cover"
+            knockout
+            className="h-full w-full cursor-pointer pointer-events-auto"
+          />
         </div>
         <div
           ref={rightRef}
-          className="relative h-full w-1/2 will-change-transform"
+          className="relative h-full w-[38%] will-change-transform"
         >
-          <div className="absolute bottom-0 right-0 h-[min(var(--scene-h,72svh),calc(50vw*3/2))] w-[min(50vw,calc(var(--scene-h,72svh)*2/3))]">
-            <AsciiCity
-              src="/ascii-hand-right.png"
-              cropX={0.5}
-              cropY={1}
-              fit="contain"
-              knockout
-              className="h-full w-full cursor-pointer pointer-events-auto"
-            />
-          </div>
+          <AsciiCity
+            src="/ascii-hand-right.png"
+            cropX={1}
+            cropY={1}
+            fit="cover"
+            knockout
+            className="h-full w-full cursor-pointer pointer-events-auto"
+          />
         </div>
       </div>
 
       <div className="pointer-events-none absolute inset-0 z-30">
         <nav
           aria-label="Footer"
-          className="pointer-events-auto absolute left-1/2 top-[58%] -translate-x-1/2 -translate-y-1/2"
+          className="pointer-events-auto absolute left-1/2 top-[min(36.5svh,22.4rem)] -translate-x-1/2 -translate-y-1/2 lg:top-[min(42.6svh,25.9rem)]"
         >
           <ul className="flex flex-col items-center gap-3 lg:gap-4">
             {nav.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className="font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/45 transition-colors hover:text-foreground lg:text-[14px]"
+                  className="font-mono text-[12px] uppercase tracking-[0.18em] text-foreground/45 transition-colors hover:text-foreground"
                 >
                   {link.label}
                 </a>
@@ -143,26 +126,44 @@ function FooterHands() {
           </ul>
         </nav>
 
-        <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 px-5 py-6 sm:px-8 lg:px-10 lg:py-8">
-          <div className="pointer-events-auto flex flex-col items-start gap-4">
-            <ThemeToggle />
-            <CtaLink href="mailto:hello@techcity.in" size="md">
-              Get in touch
-            </CtaLink>
-          </div>
-          <div className="pointer-events-auto flex flex-col items-end gap-2 text-right sm:gap-3">
-            <a
-              href="mailto:hello@techcity.in"
-              className="w-fit text-[13px] text-foreground/55 underline decoration-foreground/25 underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground lg:text-[16px]"
-            >
-              hello@techcity.in
-            </a>
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/40 lg:text-[14px]">
-              India
-            </p>
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-foreground/35">
-              © 2026 TechCity
-            </p>
+        <div className="absolute inset-x-0 bottom-0">
+          <div className="mx-auto flex max-w-7xl items-end justify-between gap-4 px-5 py-6 sm:px-8 lg:py-8">
+            <div className="pointer-events-auto flex flex-col items-start gap-3">
+              <CtaLink href="/#partners">
+                Partner with us
+              </CtaLink>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                <a
+                  href="/privacy-policy"
+                  className="font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/40 transition-colors hover:text-foreground"
+                >
+                  Privacy Policy
+                </a>
+                <a
+                  href="/terms-and-conditions"
+                  className="font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/40 transition-colors hover:text-foreground"
+                >
+                  Terms and Conditions
+                </a>
+              </div>
+            </div>
+            <div className="pointer-events-auto flex flex-col items-end gap-2 text-right sm:gap-3">
+              <p className="max-w-[16rem] text-[11px] leading-5 text-foreground/55">
+                TechCity Hub, Level 4, Cyber City 400001
+              </p>
+              <a
+                href="mailto:hello@techcityskills.com"
+                className="w-fit text-[11px] text-foreground/55 underline decoration-foreground/25 underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground"
+              >
+                hello@techcityskills.com
+              </a>
+              <a
+                href="tel:+18001234567"
+                className="w-fit text-[11px] text-foreground/55 transition-colors hover:text-foreground"
+              >
+                +1 (800) 123-4567
+              </a>
+            </div>
           </div>
         </div>
       </div>

@@ -1,11 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, type PointerEvent } from "react";
-import { getTheme } from "@/lib/theme";
 
 const SOURCE = "/tech-city.jpg?v=2";
 const DARKEN_SHADOW = 0.36;
 const DARKEN_HIGHLIGHT = 0.58;
+const DETAIL_SHADOW = 0.48;
+const DETAIL_HIGHLIGHT = 0.84;
 const BLOB_RADIUS = 64;
 
 const RAMP =
@@ -26,6 +27,7 @@ type AsciiCityProps = {
   cropY?: number;
   fit?: "cover" | "contain";
   knockout?: boolean;
+  detail?: boolean;
   revealOnView?: boolean;
   className?: string;
 };
@@ -39,13 +41,7 @@ type Grid = {
   font: string;
   dpr: number;
   vivid: boolean;
-};
-
-type Palette = {
-  light: boolean;
-  bg: [number, number, number];
-  fg: [number, number, number];
-  accent: [number, number, number];
+  detail: boolean;
 };
 
 function loadImage(src: string) {
@@ -144,78 +140,52 @@ function percentile(sorted: number[], p: number) {
   return sorted[i];
 }
 
-function parseHexRgb(value: string, fallback: [number, number, number]) {
-  const hex = value.trim();
-  if (!hex.startsWith("#") || (hex.length !== 7 && hex.length !== 4)) {
-    return fallback;
-  }
-  if (hex.length === 4) {
-    return [
-      parseInt(hex[1] + hex[1], 16),
-      parseInt(hex[2] + hex[2], 16),
-      parseInt(hex[3] + hex[3], 16),
-    ] as [number, number, number];
-  }
-  return [
-    parseInt(hex.slice(1, 3), 16),
-    parseInt(hex.slice(3, 5), 16),
-    parseInt(hex.slice(5, 7), 16),
-  ] as [number, number, number];
-}
-
-function readPalette(): Palette {
-  const styles = getComputedStyle(document.documentElement);
-  const light = getTheme() === "light";
-  return {
-    light,
-    bg: parseHexRgb(
-      styles.getPropertyValue("--background"),
-      light ? [246, 249, 253] : [13, 13, 13],
-    ),
-    fg: parseHexRgb(
-      styles.getPropertyValue("--foreground"),
-      light ? [13, 13, 13] : [246, 249, 253],
-    ),
-    accent: parseHexRgb(styles.getPropertyValue("--accent"), [67, 104, 181]),
-  };
-}
-
-function mix(a: number, b: number, t: number) {
-  return a + (b - a) * t;
-}
-
 function cellChar(cell: Cell) {
   if (cell.knockout) return " ";
   const idx = Math.min(RAMP_LAST, Math.floor(cell.luma * RAMP_LAST + 0.0001));
   return RAMP[idx];
 }
 
-function cellFill(cell: Cell, palette: Palette, hover: boolean, vivid = false) {
+function cellFill(cell: Cell, hover: boolean, vivid = false, detail = false) {
   const { r, g, b, luma: t } = cell;
-  if (!palette.light) {
-    const shade = vivid
+  const shade = vivid
+    ? hover
+      ? 1.14 + t * 0.22
+      : 0.78 + t * 0.4
+    : detail
       ? hover
-        ? 1.14 + t * 0.22
-        : 0.78 + t * 0.4
+        ? 1.16 + t * 0.24
+        : DETAIL_SHADOW + t * (DETAIL_HIGHLIGHT - DETAIL_SHADOW)
       : hover
         ? 1.08 + t * 0.18
         : DARKEN_SHADOW + t * (DARKEN_HIGHLIGHT - DARKEN_SHADOW);
-    return `rgb(${Math.min(255, Math.round(r * shade))} ${Math.min(255, Math.round(g * shade))} ${Math.min(255, Math.round(b * shade))})`;
-  }
+  return `rgb(${Math.min(255, Math.round(r * shade))} ${Math.min(255, Math.round(g * shade))} ${Math.min(255, Math.round(b * shade))})`;
+}
 
-  const [br, bg, bb] = palette.bg;
-  const [ar, ag, ab] = palette.accent;
-  const print = hover ? 0.55 + t * 0.38 : 0.38 + t * 0.36;
-  let inkR = r * print;
-  let inkG = g * print;
-  let inkB = b * print;
-  if (hover) {
-    inkR = mix(inkR, ar, 0.16);
-    inkG = mix(inkG, ag, 0.16);
-    inkB = mix(inkB, ab, 0.16);
+function sharpenDetail(cells: Cell[], cols: number, rows: number) {
+  const src = cells.map((cell) => cell.luma);
+  for (let y = 1; y < rows - 1; y++) {
+    for (let x = 1; x < cols - 1; x++) {
+      const i = y * cols + x;
+      const c = src[i];
+      const blur =
+        (src[i - cols - 1] +
+          src[i - cols] +
+          src[i - cols + 1] +
+          src[i - 1] +
+          c +
+          src[i + 1] +
+          src[i + cols - 1] +
+          src[i + cols] +
+          src[i + cols + 1]) /
+        9;
+      const edge = c - blur;
+      const quietSky = c < 0.07 && Math.abs(edge) < 0.05;
+      cells[i].luma = quietSky
+        ? c
+        : Math.min(1, Math.max(0, c + edge * 1.15));
+    }
   }
-  const paperMix = 0.02 + (1 - t) * 0.1;
-  return `rgb(${Math.round(mix(inkR, br, paperMix))} ${Math.round(mix(inkG, bg, paperMix))} ${Math.round(mix(inkB, bb, paperMix))})`;
 }
 
 function sampleCells(
@@ -227,6 +197,7 @@ function sampleCells(
     cropY: number;
     fit: "cover" | "contain";
     knockout: boolean;
+    detail: boolean;
   },
 ): Cell[] {
   const off = document.createElement("canvas");
@@ -236,6 +207,7 @@ function sampleCells(
   if (!ctx) return [];
 
   ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = options.detail ? "high" : "low";
   drawSource(ctx, img, cols, rows, options);
   const data = ctx.getImageData(0, 0, cols, rows).data;
   const cells: Cell[] = new Array(cols * rows);
@@ -256,8 +228,8 @@ function sampleCells(
   }
 
   const sorted = (keep.length ? keep : lumas).slice().sort((a, b) => a - b);
-  const lo = percentile(sorted, 0.08);
-  const hi = percentile(sorted, 0.94);
+  const lo = percentile(sorted, options.detail ? 0.16 : 0.08);
+  const hi = percentile(sorted, options.detail ? 0.8 : 0.94);
   const range = Math.max(0.12, hi - lo);
 
   for (let i = 0; i < cells.length; i++) {
@@ -267,9 +239,11 @@ function sampleCells(
     }
     let t = (lumas[i] - lo) / range;
     t = Math.min(1, Math.max(0, t));
-    t = Math.pow(t, 0.72);
+    t = Math.pow(t, options.detail ? 0.78 : 0.72);
     cells[i].luma = t;
   }
+
+  if (options.detail) sharpenDetail(cells, cols, rows);
 
   return cells;
 }
@@ -286,7 +260,7 @@ function monoFamily() {
   return family || "ui-monospace, monospace";
 }
 
-function paintBase(grid: Grid, palette: Palette = readPalette()) {
+function paintBase(grid: Grid) {
   const { cells, cols, rows, cellW, cellH, font, dpr } = grid;
   const canvas = document.createElement("canvas");
   canvas.width = Math.max(1, Math.round(cols * cellW));
@@ -308,7 +282,7 @@ function paintBase(grid: Grid, palette: Palette = readPalette()) {
       if (!cell || cell.knockout) continue;
       const char = cellChar(cell);
       if (char === " ") continue;
-      ctx.fillStyle = cellFill(cell, palette, false, grid.vivid);
+      ctx.fillStyle = cellFill(cell, false, grid.vivid, grid.detail);
       ctx.fillText(char, x * cssCellW, y * cssCellH);
     }
   }
@@ -322,6 +296,7 @@ export default function AsciiCity({
   cropY = 0.12,
   fit = "cover",
   knockout = false,
+  detail = false,
   revealOnView = false,
   className = "h-full w-full",
 }: AsciiCityProps) {
@@ -332,7 +307,6 @@ export default function AsciiCity({
   const introRef = useRef(1);
   const rafRef = useRef(0);
   const sizeRef = useRef({ w: 0, h: 0, dpr: 1 });
-  const paletteRef = useRef<Palette | null>(null);
   const pointerRef = useRef({
     x: 0,
     y: 0,
@@ -369,8 +343,7 @@ export default function AsciiCity({
     ctx.globalAlpha = Math.min(1, intro * 1.4);
     ctx.drawImage(base, 0, 0);
 
-    const palette = paletteRef.current;
-    if (pointer.radius > 0.6 && palette) {
+    if (pointer.radius > 0.6) {
       const cssCellW = grid.cellW / dpr;
       const cssCellH = grid.cellH / dpr;
       const radius = pointer.radius * dpr;
@@ -416,7 +389,7 @@ export default function AsciiCity({
 
           if (dist > localRadius) continue;
 
-          ctx.fillStyle = cellFill(cell, palette, true, grid.vivid);
+          ctx.fillStyle = cellFill(cell, true, grid.vivid, grid.detail);
           ctx.fillText(char, col * cssCellW, row * cssCellH);
         }
       }
@@ -456,15 +429,25 @@ export default function AsciiCity({
       canvas.style.height = `${cssH}px`;
       sizeRef.current = { w: width, h: height, dpr };
 
-      const cols = Math.round(Math.min(180, Math.max(80, cssW / 5.1)));
+      const cols = detail
+        ? Math.round(Math.min(240, Math.max(100, cssW / 3.8)))
+        : Math.round(Math.min(180, Math.max(80, cssW / 5.1)));
       const cellW = width / cols;
-      const fontSize = Math.max(7, (cellW / dpr) * 1.24);
-      const cellH = fontSize * dpr * 0.88;
+      const fontSize = detail
+        ? Math.max(5, (cellW / dpr) * 1.02)
+        : Math.max(7, (cellW / dpr) * 1.24);
+      const cellH = fontSize * dpr * (detail ? 1.06 : 0.88);
       const rows = Math.max(28, Math.floor(height / cellH));
       const family = monoFamily();
 
       const grid: Grid = {
-        cells: sampleCells(img, cols, rows, { cropX, cropY, fit, knockout }),
+        cells: sampleCells(img, cols, rows, {
+          cropX,
+          cropY,
+          fit,
+          knockout,
+          detail,
+        }),
         cols,
         rows,
         cellW,
@@ -472,14 +455,14 @@ export default function AsciiCity({
         font: `${fontSize}px ${family}`,
         dpr,
         vivid: knockout,
+        detail,
       };
       gridRef.current = grid;
-      paletteRef.current = readPalette();
-      baseRef.current = paintBase(grid, paletteRef.current);
+      baseRef.current = paintBase(grid);
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(renderFrame);
     },
-    [cropX, cropY, fit, knockout, renderFrame],
+    [cropX, cropY, detail, fit, knockout, renderFrame],
   );
 
   useEffect(() => {
@@ -554,22 +537,11 @@ export default function AsciiCity({
     });
     ro.observe(wrap);
 
-    const onThemeChange = () => {
-      const grid = gridRef.current;
-      if (!grid) return;
-      paletteRef.current = readPalette();
-      baseRef.current = paintBase(grid, paletteRef.current);
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(renderFrame);
-    };
-    window.addEventListener("themechange", onThemeChange);
-
     return () => {
       cancelled = true;
       cancelAnimationFrame(rafRef.current);
       ro.disconnect();
       io?.disconnect();
-      window.removeEventListener("themechange", onThemeChange);
     };
   }, [build, renderFrame, revealOnView, src]);
 

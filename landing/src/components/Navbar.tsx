@@ -6,32 +6,32 @@ import CtaLink from "@/components/CtaLink";
 
 const links = [
   {
-    href: "#about",
+    href: "/#about",
     label: "About",
     children: [
-      { href: "#about", label: "Our story" },
-      { href: "#faculty", label: "Faculty" },
-      { href: "#programs", label: "Programs" },
+      { href: "/#about", label: "Our story" },
+      { href: "/#faculty", label: "Faculty" },
+      { href: "/#programs", label: "Programs" },
+      { href: "/#testimonials", label: "Testimonials" },
     ],
   },
   {
-    href: "#projects",
+    href: "/#projects",
     label: "Projects",
     children: [
-      { href: "#projects-ongoing", label: "Ongoing" },
-      { href: "#projects-completed", label: "Completed" },
+      { href: "/#projects-ongoing", label: "Ongoing" },
+      { href: "/#projects-completed", label: "Completed" },
     ],
   },
   {
-    href: "#partners",
+    href: "/#partners",
     label: "Partners",
     children: [
-      { href: "#partners-college", label: "College" },
-      { href: "#partners-industry", label: "Industry" },
+      { href: "/#partners-college", label: "College" },
+      { href: "/#partners-industry", label: "Industry" },
     ],
   },
-  { href: "#testimonials", label: "Testimonials" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 function Chevron({ open, className = "" }: { open?: boolean; className?: string }) {
@@ -49,6 +49,29 @@ function Chevron({ open, className = "" }: { open?: boolean; className?: string 
         strokeLinecap="square"
       />
     </svg>
+  );
+}
+
+function StudentsLink({
+  onClick,
+  className = "",
+}: {
+  onClick?: () => void;
+  className?: string;
+}) {
+  return (
+    <a
+      href="/students"
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={onClick}
+      className={`group inline-flex h-8 shrink-0 items-center justify-center border border-white bg-transparent px-4 text-[13px] font-medium text-white transition-colors duration-300 hover:bg-white hover:text-background ${className}`}
+    >
+      For students
+      <span className="inline-flex max-w-0 items-center overflow-hidden transition-all duration-300 ease-power4-in-out group-hover:ml-1.5 group-hover:max-w-4">
+        <ExternalArrow className="-translate-x-1 translate-y-1 transition-transform duration-300 ease-power4-in-out group-hover:translate-x-0 group-hover:translate-y-0" />
+      </span>
+    </a>
   );
 }
 
@@ -127,7 +150,7 @@ export default function Navbar() {
                 <li key={link.href} className="group/nav relative">
                   <button
                     type="button"
-                    className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/55 transition-colors group-hover/nav:text-foreground group-focus-within/nav:text-foreground"
+                    className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-[0.18em] text-foreground/55 transition-colors group-hover/nav:text-foreground group-focus-within/nav:text-foreground"
                     aria-haspopup="menu"
                     aria-expanded="false"
                   >
@@ -146,7 +169,7 @@ export default function Navbar() {
                             role="menuitem"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center justify-between gap-3 px-4 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/55 transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
+                            className="flex items-center justify-between gap-3 px-4 py-2.5 font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/55 transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
                           >
                             {child.label}
                             <ExternalArrow />
@@ -160,7 +183,7 @@ export default function Navbar() {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/55 transition-colors hover:text-foreground"
+                    className="font-mono text-[12px] uppercase tracking-[0.18em] text-foreground/55 transition-colors hover:text-foreground"
                   >
                     {link.label}
                   </a>
@@ -169,9 +192,10 @@ export default function Navbar() {
             )}
           </ul>
 
-          <CtaLink href="#partners" className="hidden lg:inline-flex">
-            Partner with us
-          </CtaLink>
+          <div className="hidden items-center gap-5 lg:flex">
+            <StudentsLink />
+            <CtaLink href="/#partners">Partner with us</CtaLink>
+          </div>
 
           <button
             type="button"
@@ -221,7 +245,7 @@ export default function Navbar() {
                 <ul
                   className={`overflow-hidden transition-[max-height,opacity] duration-200 ${
                     openSection === link.href
-                      ? "max-h-48 opacity-100"
+                      ? "max-h-64 opacity-100"
                       : "max-h-0 opacity-0"
                   }`}
                 >
@@ -232,7 +256,7 @@ export default function Navbar() {
                         onClick={closeMenu}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-between gap-3 px-6 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/50 transition-colors hover:text-foreground"
+                        className="flex items-center justify-between gap-3 px-6 py-2.5 font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/50 transition-colors hover:text-foreground"
                       >
                         {child.label}
                         <ExternalArrow />
@@ -253,9 +277,10 @@ export default function Navbar() {
               </li>
             ),
           )}
-          <li className="pt-2">
+          <li className="flex flex-col gap-4 pt-2">
+            <StudentsLink onClick={closeMenu} className="w-full" />
             <CtaLink
-              href="#partners"
+              href="/#partners"
               onClick={closeMenu}
               className="flex w-full"
             >
