@@ -22,7 +22,7 @@ export default function Hero() {
           </p>
 
           <div className="mt-9">
-            <CtaLink href="#programs" size="lg">
+            <CtaLink href="/programs" size="lg">
               Explore Programs
             </CtaLink>
           </div>

@@ -6,10 +6,10 @@ import CtaLink from "@/components/CtaLink";
 
 const nav = [
   { href: "/", label: "Home" },
-  { href: "/#about", label: "About" },
-  { href: "/#projects", label: "Projects" },
-  { href: "/#partners", label: "Partners" },
-  { href: "/#contact", label: "Contact" },
+  { href: "/about", label: "About" },
+  { href: "/projects", label: "Projects" },
+  { href: "/partners", label: "Partners" },
+  { href: "/contact", label: "Contact" },
 ];
 
 const FOLLOW_X = 18;
@@ -129,7 +129,7 @@ function FooterHands() {
         <div className="absolute inset-x-0 bottom-0">
           <div className="mx-auto flex max-w-7xl items-end justify-between gap-4 px-5 py-6 sm:px-8 lg:py-8">
             <div className="pointer-events-auto flex flex-col items-start gap-3">
-              <CtaLink href="/#partners">
+              <CtaLink href="/partners">
                 Partner with us
               </CtaLink>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1">

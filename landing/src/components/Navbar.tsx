@@ -6,32 +6,32 @@ import CtaLink from "@/components/CtaLink";
 
 const links = [
   {
-    href: "/#about",
+    href: "/about",
     label: "About",
     children: [
-      { href: "/#about", label: "Our story" },
-      { href: "/#faculty", label: "Faculty" },
-      { href: "/#programs", label: "Programs" },
-      { href: "/#testimonials", label: "Testimonials" },
+      { href: "/about", label: "Our story" },
+      { href: "/faculty", label: "Faculty" },
+      { href: "/programs", label: "Programs" },
+      { href: "/testimonials", label: "Testimonials" },
     ],
   },
   {
-    href: "/#projects",
+    href: "/projects",
     label: "Projects",
     children: [
-      { href: "/#projects-ongoing", label: "Ongoing" },
-      { href: "/#projects-completed", label: "Completed" },
+      { href: "/projects/ongoing", label: "Ongoing" },
+      { href: "/projects/completed", label: "Completed" },
     ],
   },
   {
-    href: "/#partners",
+    href: "/partners",
     label: "Partners",
     children: [
-      { href: "/#partners-college", label: "College" },
-      { href: "/#partners-industry", label: "Industry" },
+      { href: "/partners/college", label: "College" },
+      { href: "/partners/industry", label: "Industry" },
     ],
   },
-  { href: "/#contact", label: "Contact" },
+  { href: "/contact", label: "Contact" },
 ];
 
 function Chevron({ open, className = "" }: { open?: boolean; className?: string }) {
@@ -62,8 +62,6 @@ function StudentsLink({
   return (
     <a
       href="/students"
-      target="_blank"
-      rel="noopener noreferrer"
       onClick={onClick}
       className={`group inline-flex h-8 shrink-0 items-center justify-center border border-white bg-transparent px-4 text-[13px] font-medium text-white transition-colors duration-300 hover:bg-white hover:text-background ${className}`}
     >
@@ -98,6 +96,12 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [openSection, setOpenSection] = useState<string | null>(null);
+  const [desktopSection, setDesktopSection] = useState<string | null>(null);
+  useEffect(() => {
+    const onPageShow = () => setDesktopSection(null);
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -120,6 +124,13 @@ export default function Navbar() {
   const closeMenu = () => {
     setOpen(false);
     setOpenSection(null);
+  };
+
+  const closeDesktopMenu = () => {
+    setDesktopSection(null);
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
   };
 
   return (
@@ -147,17 +158,42 @@ export default function Navbar() {
           <ul className="hidden items-center gap-7 lg:flex">
             {links.map((link) =>
               link.children ? (
-                <li key={link.href} className="group/nav relative">
+                <li
+                  key={link.href}
+                  className="relative"
+                  onMouseEnter={() => setDesktopSection(link.href)}
+                  onMouseLeave={() => setDesktopSection(null)}
+                  onFocus={() => setDesktopSection(link.href)}
+                  onBlur={(event) => {
+                    if (!event.currentTarget.contains(event.relatedTarget)) {
+                      setDesktopSection(null);
+                    }
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === "Escape") closeDesktopMenu();
+                  }}
+                >
                   <button
                     type="button"
-                    className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-[0.18em] text-foreground/55 transition-colors group-hover/nav:text-foreground group-focus-within/nav:text-foreground"
+                    className={`inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-[0.18em] transition-colors ${
+                      desktopSection === link.href
+                        ? "text-foreground"
+                        : "text-foreground/55"
+                    }`}
                     aria-haspopup="menu"
-                    aria-expanded="false"
+                    aria-expanded={desktopSection === link.href}
+                    onClick={() => setDesktopSection(link.href)}
                   >
                     {link.label}
-                    <Chevron className="group-hover/nav:rotate-180 group-focus-within/nav:rotate-180" />
+                    <Chevron open={desktopSection === link.href} />
                   </button>
-                  <div className="invisible absolute top-full left-0 min-w-52 translate-y-1 pt-3 opacity-0 transition-all duration-200 group-hover/nav:visible group-hover/nav:translate-y-0 group-hover/nav:opacity-100 group-focus-within/nav:visible group-focus-within/nav:translate-y-0 group-focus-within/nav:opacity-100">
+                  <div
+                    className={`absolute top-full left-0 min-w-52 pt-3 transition-all duration-200 ${
+                      desktopSection === link.href
+                        ? "visible translate-y-0 opacity-100"
+                        : "invisible translate-y-1 opacity-0"
+                    }`}
+                  >
                     <ul
                       role="menu"
                       className="border border-foreground/10 bg-background/95 py-2 backdrop-blur-xl"
@@ -167,8 +203,7 @@ export default function Navbar() {
                           <a
                             href={child.href}
                             role="menuitem"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            onClick={closeDesktopMenu}
                             className="flex items-center justify-between gap-3 px-4 py-2.5 font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/55 transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
                           >
                             {child.label}
@@ -194,7 +229,7 @@ export default function Navbar() {
 
           <div className="hidden items-center gap-5 lg:flex">
             <StudentsLink />
-            <CtaLink href="/#partners">Partner with us</CtaLink>
+            <CtaLink href="/partners">Partner with us</CtaLink>
           </div>
 
           <button
@@ -254,8 +289,6 @@ export default function Navbar() {
                       <a
                         href={child.href}
                         onClick={closeMenu}
-                        target="_blank"
-                        rel="noopener noreferrer"
                         className="flex items-center justify-between gap-3 px-6 py-2.5 font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/50 transition-colors hover:text-foreground"
                       >
                         {child.label}
@@ -280,7 +313,7 @@ export default function Navbar() {
           <li className="flex flex-col gap-4 pt-2">
             <StudentsLink onClick={closeMenu} className="w-full" />
             <CtaLink
-              href="/#partners"
+              href="/partners"
               onClick={closeMenu}
               className="flex w-full"
             >

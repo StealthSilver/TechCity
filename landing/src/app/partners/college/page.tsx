@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import ComingSoon from "@/components/ComingSoon";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy",
+  title: "College partners",
 };
 
-export default function PrivacyPolicy() {
+export default function CollegePartnersPage() {
   return <ComingSoon />;
 }

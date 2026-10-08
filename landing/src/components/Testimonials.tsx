@@ -1,66 +1,70 @@
+import type { CSSProperties } from "react";
+import CtaLink from "@/components/CtaLink";
 import SectionHeading from "@/components/SectionHeading";
+import TestimonialCard from "@/components/TestimonialCard";
+import { testimonials, type Testimonial } from "@/data/testimonials";
 
-const quotes = [
-  {
-    quote:
-      "Faculty who have shipped product changed how our students think about work — not just how they write exams.",
-    name: "Dean of Engineering",
-    role: "Partner university",
-  },
-  {
-    quote:
-      "The cohorts arrive interview-ready. We spend less time teaching tools and more time seeing how they solve.",
-    name: "Head of University Hiring",
-    role: "Industry partner",
-  },
-  {
-    quote:
-      "The path from classroom to first role was finally a path. Labs, mentors, and hiring briefs in the same semester.",
-    name: "Program graduate",
-    role: "2025 cohort",
-  },
+const columns = [
+  { duration: "70s", direction: "normal", className: "" },
+  { duration: "85s", direction: "reverse", className: "hidden md:block" },
+  { duration: "64s", direction: "normal", className: "hidden lg:block" },
 ];
 
+function splitIntoColumns(items: Testimonial[], count: number) {
+  return Array.from({ length: count }, (_, column) =>
+    items.filter((_, index) => index % count === column),
+  );
+}
+
 export default function Testimonials() {
+  const groups = splitIntoColumns(testimonials, columns.length);
+
   return (
     <section
       id="testimonials"
       className="scroll-mt-24 border-t border-foreground/10"
     >
-      <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-24 lg:py-28">
-        <SectionHeading
-          index="04"
-          label="Testimonials"
-          title="What partners and students say."
-          titleClassName="text-[1.85rem] sm:text-[2.25rem]"
-        />
+      <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:py-[4.5rem]">
+        <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+          <SectionHeading
+            index="04"
+            label="Testimonials"
+            title="Students who went from classroom to first role."
+          />
+          <CtaLink href="/testimonials" className="self-start sm:self-auto">
+            View all stories
+          </CtaLink>
+        </div>
 
-        <ul className="mt-12 grid gap-px bg-foreground/10 lg:grid-cols-3">
-          {quotes.map((item) => (
-            <li
-              key={item.name}
-              className="flex flex-col bg-background px-0 py-8 lg:px-8 lg:py-10 lg:first:pl-0 lg:last:pr-0"
-            >
-              <span
-                className="font-mono text-2xl leading-none text-accent-secondary"
-                aria-hidden="true"
+        <div className="marquee-mask mt-12 grid h-[40rem] gap-4 overflow-hidden md:grid-cols-2 lg:grid-cols-3">
+          {columns.map((column, index) => (
+            <div key={column.duration} className={column.className}>
+              <div
+                className="marquee-track flex flex-col"
+                style={
+                  {
+                    "--marquee-duration": column.duration,
+                    "--marquee-direction": column.direction,
+                  } as CSSProperties
+                }
               >
-                ”
-              </span>
-              <blockquote className="mt-5 flex-1 text-[1.05rem] leading-8 text-foreground/85">
-                {item.quote}
-              </blockquote>
-              <footer className="mt-8">
-                <p className="text-sm tracking-tight text-foreground">
-                  {item.name}
-                </p>
-                <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/40">
-                  {item.role}
-                </p>
-              </footer>
-            </li>
+                {[0, 1].map((copy) => (
+                  <ul
+                    key={copy}
+                    className="flex flex-col gap-4 pb-4"
+                    aria-hidden={copy === 1 ? true : undefined}
+                  >
+                    {groups[index].map((item) => (
+                      <li key={item.id}>
+                        <TestimonialCard item={item} />
+                      </li>
+                    ))}
+                  </ul>
+                ))}
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </section>
   );
