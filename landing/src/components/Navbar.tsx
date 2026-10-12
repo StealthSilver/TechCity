@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import CtaLink from "@/components/CtaLink";
 
 const links = [
@@ -31,7 +31,7 @@ const links = [
       { href: "/partners/industry", label: "Industry" },
     ],
   },
-  { href: "/contact", label: "Contact" },
+  { href: "/#contact", label: "Contact", scrollTo: "contact" },
 ];
 
 function Chevron({ open, className = "" }: { open?: boolean; className?: string }) {
@@ -55,15 +55,21 @@ function Chevron({ open, className = "" }: { open?: boolean; className?: string 
 function StudentsLink({
   onClick,
   className = "",
+  light = false,
 }: {
   onClick?: () => void;
   className?: string;
+  light?: boolean;
 }) {
   return (
     <a
       href="/students"
       onClick={onClick}
-      className={`group inline-flex h-8 shrink-0 items-center justify-center border border-white bg-transparent px-4 text-[13px] font-medium text-white transition-colors duration-300 hover:bg-white hover:text-background ${className}`}
+      className={`group inline-flex h-8 shrink-0 items-center justify-center border bg-transparent px-4 text-[13px] font-medium transition-colors duration-300 ${
+        light
+          ? "border-[#141414] text-[#141414] hover:bg-[#141414] hover:text-white"
+          : "border-white text-white hover:bg-white hover:text-background"
+      } ${className}`}
     >
       For students
       <span className="inline-flex max-w-0 items-center overflow-hidden transition-all duration-300 ease-power4-in-out group-hover:ml-1.5 group-hover:max-w-4">
@@ -92,7 +98,8 @@ function ExternalArrow({ className = "" }: { className?: string }) {
   );
 }
 
-export default function Navbar() {
+export default function Navbar({ theme = "dark" }: { theme?: "dark" | "light" }) {
+  const light = theme === "light";
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [openSection, setOpenSection] = useState<string | null>(null);
@@ -133,12 +140,36 @@ export default function Navbar() {
     }
   };
 
+  const onContactClick = (
+    event: MouseEvent<HTMLAnchorElement>,
+    scrollTo?: string,
+  ) => {
+    if (!scrollTo) return;
+    const target = document.getElementById(scrollTo);
+    if (!target) {
+      closeMenu();
+      return;
+    }
+    event.preventDefault();
+    const menuWasOpen = open;
+    closeMenu();
+    window.setTimeout(() => {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, menuWasOpen ? 320 : 0);
+  };
+
   return (
     <header
       className={`sticky top-0 z-50 transition-colors duration-300 ${
+        light ? "nav-light border-b border-black/10" : ""
+      } ${
         scrolled || open
-          ? "bg-background/80 backdrop-blur-xl"
-          : "bg-transparent"
+          ? light
+            ? "bg-white/85 backdrop-blur-xl"
+            : "bg-background/80 backdrop-blur-xl"
+          : light
+            ? "bg-white"
+            : "bg-transparent"
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-5 sm:h-[4.25rem] sm:px-8">
@@ -148,7 +179,9 @@ export default function Navbar() {
             alt="TechCity"
             width={945}
             height={921}
-            className="h-11 w-11 object-contain sm:h-12 sm:w-12"
+            className={`h-11 w-11 object-contain sm:h-12 sm:w-12 ${
+              light ? "invert hue-rotate-180" : ""
+            }`}
             priority
             unoptimized
           />
@@ -218,6 +251,7 @@ export default function Navbar() {
                 <li key={link.href}>
                   <a
                     href={link.href}
+                    onClick={(event) => onContactClick(event, link.scrollTo)}
                     className="font-mono text-[12px] uppercase tracking-[0.18em] text-foreground/55 transition-colors hover:text-foreground"
                   >
                     {link.label}
@@ -228,7 +262,7 @@ export default function Navbar() {
           </ul>
 
           <div className="hidden items-center gap-5 lg:flex">
-            <StudentsLink />
+            <StudentsLink light={light} />
             <CtaLink href="/partners">Partner with us</CtaLink>
           </div>
 
@@ -302,7 +336,7 @@ export default function Navbar() {
               <li key={link.href}>
                 <a
                   href={link.href}
-                  onClick={closeMenu}
+                  onClick={(event) => onContactClick(event, link.scrollTo)}
                   className="block rounded-lg px-3 py-3 font-mono text-[12px] uppercase tracking-[0.18em] text-foreground/70 transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
                 >
                   {link.label}
@@ -311,7 +345,7 @@ export default function Navbar() {
             ),
           )}
           <li className="flex flex-col gap-4 pt-2">
-            <StudentsLink onClick={closeMenu} className="w-full" />
+            <StudentsLink onClick={closeMenu} light={light} className="w-full" />
             <CtaLink
               href="/partners"
               onClick={closeMenu}

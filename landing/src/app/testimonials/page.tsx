@@ -33,7 +33,7 @@ export default function TestimonialsPage() {
           <div className="fade-up flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <SectionHeading
-                index="04"
+                index="05"
                 label="Testimonials"
                 title="In their words."
                 titleClassName="text-[2.35rem] sm:text-5xl"

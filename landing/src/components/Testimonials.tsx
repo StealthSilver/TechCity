@@ -27,7 +27,7 @@ export default function Testimonials() {
       <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:py-[4.5rem]">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
           <SectionHeading
-            index="04"
+            index="05"
             label="Testimonials"
             title="Students who went from classroom to first role."
           />

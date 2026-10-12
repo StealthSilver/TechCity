@@ -16,6 +16,47 @@ const FOLLOW_X = 18;
 const FOLLOW_Y = 14;
 const FOLLOW_EASE = 0.07;
 
+function FooterBar() {
+  return (
+    <div className="mx-auto flex max-w-7xl items-end justify-between gap-4 px-5 py-6 sm:px-8 lg:py-8">
+      <div className="pointer-events-auto flex flex-col items-start gap-3">
+        <CtaLink href="/partners">Partner with us</CtaLink>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+          <a
+            href="/privacy-policy"
+            className="font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/40 transition-colors hover:text-foreground"
+          >
+            Privacy Policy
+          </a>
+          <a
+            href="/terms-and-conditions"
+            className="font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/40 transition-colors hover:text-foreground"
+          >
+            Terms and Conditions
+          </a>
+        </div>
+      </div>
+      <div className="pointer-events-auto flex flex-col items-end gap-2 text-right sm:gap-3">
+        <p className="max-w-[16rem] text-[11px] leading-5 text-foreground/55">
+          TechCity Hub, Level 4, Cyber City 400001
+        </p>
+        <a
+          href="mailto:hello@techcityskills.com"
+          className="w-fit text-[11px] text-foreground/55 underline decoration-foreground/25 underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground"
+        >
+          hello@techcityskills.com
+        </a>
+        <a
+          href="tel:+18001234567"
+          className="w-fit text-[11px] text-foreground/55 transition-colors hover:text-foreground"
+        >
+          +1 (800) 123-4567
+        </a>
+      </div>
+    </div>
+  );
+}
+
 function FooterHands() {
   const sceneRef = useRef<HTMLDivElement>(null);
   const leftRef = useRef<HTMLDivElement>(null);
@@ -127,54 +168,17 @@ function FooterHands() {
         </nav>
 
         <div className="absolute inset-x-0 bottom-0">
-          <div className="mx-auto flex max-w-7xl items-end justify-between gap-4 px-5 py-6 sm:px-8 lg:py-8">
-            <div className="pointer-events-auto flex flex-col items-start gap-3">
-              <CtaLink href="/partners">
-                Partner with us
-              </CtaLink>
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                <a
-                  href="/privacy-policy"
-                  className="font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/40 transition-colors hover:text-foreground"
-                >
-                  Privacy Policy
-                </a>
-                <a
-                  href="/terms-and-conditions"
-                  className="font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/40 transition-colors hover:text-foreground"
-                >
-                  Terms and Conditions
-                </a>
-              </div>
-            </div>
-            <div className="pointer-events-auto flex flex-col items-end gap-2 text-right sm:gap-3">
-              <p className="max-w-[16rem] text-[11px] leading-5 text-foreground/55">
-                TechCity Hub, Level 4, Cyber City 400001
-              </p>
-              <a
-                href="mailto:hello@techcityskills.com"
-                className="w-fit text-[11px] text-foreground/55 underline decoration-foreground/25 underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground"
-              >
-                hello@techcityskills.com
-              </a>
-              <a
-                href="tel:+18001234567"
-                className="w-fit text-[11px] text-foreground/55 transition-colors hover:text-foreground"
-              >
-                +1 (800) 123-4567
-              </a>
-            </div>
-          </div>
+          <FooterBar />
         </div>
       </div>
     </div>
   );
 }
 
-export default function Footer() {
+export default function Footer({ compact = false }: { compact?: boolean }) {
   return (
-    <footer id="contact" className="relative scroll-mt-24">
-      <FooterHands />
+    <footer id="contact" className="relative">
+      {compact ? <FooterBar /> : <FooterHands />}
     </footer>
   );
 }
