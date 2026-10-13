@@ -57,9 +57,7 @@ export default async function UpcomingProjectsPage({ searchParams }: Props) {
               Apply
             </p>
             <h2 className="mt-4 text-[1.7rem] font-normal leading-[1.1] tracking-tight text-foreground sm:text-[2rem]">
-              {opening
-                ? `${opening.subject} trainer, ${opening.city}`
-                : "Apply for a trainer seat."}
+              Join as a trainer.
             </h2>
             <TrainerApply openingId={opening?.id} timing="upcoming" />
           </div>
