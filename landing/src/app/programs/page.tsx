@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
-import CtaLink from "@/components/CtaLink";
+import { PartnerCta } from "@/components/PartnerApply";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import ProgramInsights from "@/components/ProgramInsights";
@@ -27,11 +27,6 @@ export default function ProgramsPage() {
               title="What TechCity runs with a campus."
               titleClassName="text-[2.35rem] sm:text-5xl"
             />
-            <p className="mt-6 max-w-xl text-base leading-7 text-foreground/70">
-              Five programs run with a college. Each one below is how it
-              works: trainers for students, faculty development, placement
-              preparation, mentorship, and online lessons.
-            </p>
           </div>
 
           <ul className="fade-up mt-12 grid gap-px bg-foreground/10 sm:grid-cols-2 lg:grid-cols-5">
@@ -131,9 +126,7 @@ export default function ProgramsPage() {
                 the same students.
               </p>
             </div>
-            <CtaLink href="/partners" className="self-start sm:self-auto">
-              Partner with us
-            </CtaLink>
+            <PartnerCta className="self-start sm:self-auto" />
           </div>
         </section>
 

@@ -35,7 +35,7 @@ export function GapFigure({ className = "" }: { className?: string }) {
         strokeOpacity="0.7"
       />
       <rect x="348" y="72" width="196" height="32" fill="var(--accent-secondary)" />
-      <Mono x="364" y="88" size={11} fill="#0d0d0d">
+      <Mono x="364" y="88" size={11} fill="var(--on-accent-secondary)">
         TEAM
       </Mono>
       {team.map((label, index) => (
@@ -112,7 +112,7 @@ export function KeptLabFigure({ className = "" }: { className?: string }) {
         Kept
       </Mono>
       <rect x="368" y="176" width="140" height="28" fill="var(--accent-secondary)" />
-      <Mono x="382" y="190" size={11} fill="#0d0d0d">
+      <Mono x="382" y="190" size={11} fill="var(--on-accent-secondary)">
         IN REVIEW
       </Mono>
       <Mono x="368" y="240" size={11} opacity={0.45}>
@@ -222,7 +222,7 @@ export function FirstWeekFigure({ className = "" }: { className?: string }) {
             x="122"
             y={144 + index * 60}
             size={12}
-            fill={row.live ? "#0d0d0d" : "var(--on-accent)"}
+            fill={row.live ? "var(--on-accent-secondary)" : "var(--on-accent)"}
           >
             {row.label}
           </Mono>

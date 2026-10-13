@@ -13,8 +13,9 @@ export const directors = [
       "System design and cloud",
       "Mentorship",
     ],
-    image: "/faculty/deepak.jpg",
-    imageAlt: "Placeholder portrait of Deepak Tripathi",
+    image: "/faculty/Global%20Trends%20Symposium%20Presenter.png",
+    imageAlt: "Deepak Tripathi speaking at the Global Trends Symposium",
+    imagePosition: "38% 22%",
   },
   {
     name: "Ms. Gunjan Soam",
@@ -30,7 +31,8 @@ export const directors = [
       "Talent development",
       "College and industry partnerships",
     ],
-    image: "/faculty/gunjan.jpg",
-    imageAlt: "Placeholder portrait of Gunjan Soam",
+    image: "/faculty/AI%20Workshop%20Presentation%20in%20a%20Modern%20Classroom.png",
+    imageAlt: "Gunjan Soam presenting Smart Learning Using AI",
+    imagePosition: "22% 32%",
   },
 ];

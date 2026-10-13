@@ -3,10 +3,10 @@ import CtaLink from "@/components/CtaLink";
 import SlotNumber from "@/components/SlotNumber";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import { FacultyInsights } from "@/components/ProgramInsights";
 import SectionHeading from "@/components/SectionHeading";
 import { directors } from "@/data/directors";
 import { facultyPanel } from "@/data/program-insights";
+import StoryGallery from "@/components/StoryGallery";
 import {
   FirstWeekFigure,
   GapFigure,
@@ -110,13 +110,13 @@ export default function AboutPage() {
               />
             </div>
 
-            <div className="mt-12 flex flex-col gap-16 lg:gap-24">
+            <div className="mt-12 flex flex-col gap-12 lg:gap-16">
               {pairs.map((pair) => {
                 const Figure = pair.figure;
                 return (
                   <article
                     key={pair.index}
-                    className="fade-up grid items-start gap-8 lg:grid-cols-2 lg:gap-12"
+                    className="fade-up grid items-start gap-10 lg:grid-cols-2 lg:gap-16"
                   >
                     <Figure />
                     <div className="grid gap-px bg-foreground/10">
@@ -151,49 +151,46 @@ export default function AboutPage() {
         </section>
 
         <section className="border-t border-foreground/10">
-          <ul className="mx-auto grid max-w-7xl grid-cols-2 gap-px bg-foreground/10 lg:grid-cols-4">
-            {figures.map((item, index) => (
-              <li key={item.label} className="bg-background px-5 py-8 sm:px-8 sm:py-10">
-                <p className="text-4xl leading-none tracking-tight text-foreground sm:text-5xl">
-                  <SlotNumber value={item.value} delay={index * 80} />
-                </p>
-                <p className="mt-3 max-w-[12rem] font-mono text-[10px] uppercase leading-5 tracking-[0.16em] text-foreground/45">
-                  {item.label}
-                </p>
-              </li>
-            ))}
-          </ul>
+          <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:py-[4.5rem]">
+            <ul className="grid grid-cols-2 gap-px bg-foreground/10 lg:grid-cols-4">
+              {figures.map((item, index) => (
+                <li key={item.label} className="bg-background px-4 py-5 sm:px-5">
+                  <p className="text-3xl leading-none tracking-tight text-foreground sm:text-4xl">
+                    <SlotNumber value={item.value} delay={index * 80} />
+                  </p>
+                  <p className="mt-2 max-w-[11rem] font-mono text-[10px] uppercase leading-4 tracking-[0.14em] text-foreground/40">
+                    {item.label}
+                  </p>
+                </li>
+              ))}
+            </ul>
+            <ul className="mt-px grid grid-cols-2 gap-px bg-foreground/10 lg:grid-cols-4">
+              {facultyPanel.metrics.map((item, index) => (
+                <li key={item.label} className="bg-background px-4 py-5 sm:px-5">
+                  <p className="text-3xl leading-none tracking-tight text-foreground sm:text-4xl">
+                    <SlotNumber value={item.value} delay={index * 80} />
+                  </p>
+                  <p className="mt-2 max-w-[11rem] font-mono text-[10px] uppercase leading-4 tracking-[0.14em] text-foreground/40">
+                    {item.label}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
         </section>
-
-        <section className="border-t border-foreground/10">
-          <ul className="mx-auto grid max-w-7xl grid-cols-2 gap-px bg-foreground/10 lg:grid-cols-4">
-            {facultyPanel.metrics.map((item, index) => (
-              <li key={item.label} className="bg-background px-5 py-8 sm:px-8 sm:py-10">
-                <p className="text-4xl leading-none tracking-tight text-foreground sm:text-5xl">
-                  <SlotNumber value={item.value} delay={index * 80} />
-                </p>
-                <p className="mt-3 max-w-[12rem] font-mono text-[10px] uppercase leading-5 tracking-[0.16em] text-foreground/45">
-                  {item.label}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <FacultyInsights index="04" />
 
         <section className="border-t border-foreground/10">
           <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:py-[4.5rem]">
             <div className="fade-up max-w-2xl">
               <SectionHeading
-                index="05"
+                index="04"
                 label="What we hold the work to"
                 title="A program earns its place when a hiring team would recognise it."
               />
             </div>
             <ol className="mt-12 grid gap-px bg-foreground/10 lg:grid-cols-3">
               {principles.map((principle) => (
-                <li key={principle.index} className="bg-background px-0 py-8 sm:px-2 lg:px-6 lg:first:pl-0 lg:last:pr-0">
+                <li key={principle.index} className="bg-background py-8 lg:px-6 lg:first:pl-0 lg:last:pr-0">
                   <p className="font-mono text-[11px] tracking-[0.16em] text-accent">
                     {principle.index}
                   </p>
@@ -211,22 +208,24 @@ export default function AboutPage() {
 
         <section className="border-t border-foreground/10">
           <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:py-[4.5rem]">
-            <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
-              <div className="max-w-xl">
-                <h2 className="text-[1.7rem] font-normal leading-[1.1] tracking-tight text-foreground sm:text-[2rem]">
-                  The company is led by the two people who set that standard.
-                </h2>
-                <p className="mt-4 text-[15px] leading-7 text-foreground/65">
+            <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+              <div className="max-w-2xl">
+                <SectionHeading
+                  index="05"
+                  label="Directors"
+                  title="The company is led by the two people who set that standard."
+                />
+                <p className="mt-5 max-w-xl text-[15px] leading-7 text-foreground/65">
                   Deepak Tripathi leads the technology. Gunjan Soam leads the
                   academic work and the operations that put a program inside a
                   college.
                 </p>
               </div>
-              <CtaLink href="/faculty" className="self-start sm:self-auto">
+              <CtaLink href="/faculty" className="self-start lg:self-auto">
                 Meet the directors
               </CtaLink>
             </div>
-            <ul className="mt-12 grid gap-10 sm:grid-cols-2 sm:gap-8">
+            <ul className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-16">
               {directors.map((director) => (
                 <li key={director.name} className="flex items-start gap-4">
                   <img
@@ -235,6 +234,7 @@ export default function AboutPage() {
                     width={80}
                     height={80}
                     className="size-16 shrink-0 object-cover sm:size-20"
+                    style={{ objectPosition: director.imagePosition }}
                   />
                   <div className="min-w-0">
                     <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent">
@@ -262,6 +262,8 @@ export default function AboutPage() {
             </ul>
           </div>
         </section>
+
+        <StoryGallery />
       </main>
       <Footer />
     </div>

@@ -32,7 +32,7 @@ export default function TestimonialCard({
 }) {
   return (
     <figure
-      className={`group flex flex-col border border-foreground/10 bg-background p-6 transition-colors duration-500 hover:border-foreground/25 sm:p-7 ${className}`}
+      className={`group flex w-full min-w-0 flex-col border border-foreground/10 bg-background p-5 transition-colors duration-500 hover:border-foreground/25 sm:p-7 ${className}`}
     >
       <div className="flex items-center justify-between gap-4">
         <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
@@ -53,8 +53,8 @@ export default function TestimonialCard({
         {item.outcome}
       </p>
 
-      <figcaption className="mt-6 flex items-center gap-3 border-t border-foreground/10 pt-5">
-        <span className="grid size-9 shrink-0 place-items-center bg-accent/15 font-mono text-[11px] tracking-[0.08em] text-foreground transition-colors duration-500 group-hover:bg-accent">
+      <figcaption className="mt-6 flex min-w-0 items-center gap-3 border-t border-foreground/10 pt-5">
+        <span className="grid size-9 shrink-0 place-items-center bg-accent/15 font-mono text-[11px] tracking-[0.08em] text-foreground transition-colors duration-500 group-hover:bg-accent group-hover:text-on-accent">
           {initials(item.name)}
         </span>
         <span className="min-w-0">

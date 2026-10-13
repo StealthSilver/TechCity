@@ -36,11 +36,11 @@ export default function Testimonials() {
           </CtaLink>
         </div>
 
-        <div className="marquee-mask mt-12 grid h-[40rem] gap-4 overflow-hidden md:grid-cols-2 lg:grid-cols-3">
+        <div className="marquee-mask mt-12 grid h-[40rem] grid-cols-[minmax(0,1fr)] gap-4 overflow-hidden md:grid-cols-2 lg:grid-cols-3">
           {columns.map((column, index) => (
-            <div key={column.duration} className={column.className}>
+            <div key={column.duration} className={`min-w-0 overflow-hidden ${column.className}`}>
               <div
-                className="marquee-track flex flex-col"
+                className="marquee-track flex w-full min-w-0 flex-col"
                 style={
                   {
                     "--marquee-duration": column.duration,

@@ -41,37 +41,52 @@ export default function CtaLink({
   className = "",
   size = "sm",
 }: {
-  href: string;
+  href?: string;
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;
   size?: keyof typeof sizes;
 }) {
   const { box, label } = sizes[size];
+  const classes = `group inline-flex min-w-0 shrink-0 cursor-pointer items-center justify-center whitespace-nowrap font-medium outline-none ${className}`;
+
+  if (!href) {
+    return (
+      <button type="button" onClick={onClick} className={classes}>
+        {ctaInner(box, label, children)}
+      </button>
+    );
+  }
 
   return (
-    <a
-      href={href}
-      onClick={onClick}
-      className={`group inline-flex min-w-0 shrink-0 cursor-pointer items-center justify-center whitespace-nowrap font-medium outline-none ${className}`}
-    >
-      <span className="relative flex w-full items-center gap-1.5">
-        <span
-          className={`flex origin-left -rotate-45 scale-0 items-center justify-center rounded-none bg-accent text-on-accent transition-transform duration-700 ease-power4-in-out group-hover:rotate-[0deg] group-hover:scale-100 ${box}`}
-        >
-          <PlusIcon />
-        </span>
-        <span
-          className={`flex w-full flex-1 items-center justify-center rounded-none bg-accent text-on-accent transition-transform duration-700 ease-power4-in-out group-hover:translate-x-0 ${label}`}
-        >
-          <span>{children}</span>
-        </span>
-        <span
-          className={`absolute right-0 z-10 flex origin-right scale-100 items-center justify-center rounded-none bg-accent text-on-accent transition-transform duration-700 ease-power4-in-out group-hover:-rotate-45 group-hover:scale-0 ${box}`}
-        >
-          <PlusIcon />
-        </span>
-      </span>
+    <a href={href} onClick={onClick} className={classes}>
+      {ctaInner(box, label, children)}
     </a>
+  );
+}
+
+function ctaInner(
+  box: string,
+  label: string,
+  children: React.ReactNode,
+) {
+  return (
+    <span className="relative flex w-full items-center gap-1.5">
+      <span
+        className={`flex origin-left -rotate-45 scale-0 items-center justify-center rounded-none bg-accent text-on-accent transition-transform duration-700 ease-power4-in-out group-hover:rotate-[0deg] group-hover:scale-100 ${box}`}
+      >
+        <PlusIcon />
+      </span>
+      <span
+        className={`flex w-full flex-1 items-center justify-center rounded-none bg-accent text-on-accent transition-transform duration-700 ease-power4-in-out group-hover:translate-x-0 ${label}`}
+      >
+        <span>{children}</span>
+      </span>
+      <span
+        className={`absolute right-0 z-10 flex origin-right scale-100 items-center justify-center rounded-none bg-accent text-on-accent transition-transform duration-700 ease-power4-in-out group-hover:-rotate-45 group-hover:scale-0 ${box}`}
+      >
+        <PlusIcon />
+      </span>
+    </span>
   );
 }

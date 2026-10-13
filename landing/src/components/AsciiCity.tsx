@@ -42,7 +42,12 @@ type Grid = {
   dpr: number;
   vivid: boolean;
   detail: boolean;
+  light: boolean;
 };
+
+function isLightTheme() {
+  return document.documentElement.dataset.theme === "light";
+}
 
 function loadImage(src: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
@@ -140,14 +145,82 @@ function percentile(sorted: number[], p: number) {
   return sorted[i];
 }
 
-function cellChar(cell: Cell) {
+function cellChar(cell: Cell, light = false, detail = false) {
   if (cell.knockout) return " ";
-  const idx = Math.min(RAMP_LAST, Math.floor(cell.luma * RAMP_LAST + 0.0001));
+  const tone = light && !detail ? Math.pow(cell.luma, 0.42) : cell.luma;
+  const idx = Math.min(RAMP_LAST, Math.floor(tone * RAMP_LAST + 0.0001));
   return RAMP[idx];
 }
 
-function cellFill(cell: Cell, hover: boolean, vivid = false, detail = false) {
+function rgbToHsl(r: number, g: number, b: number) {
+  const rn = r / 255;
+  const gn = g / 255;
+  const bn = b / 255;
+  const max = Math.max(rn, gn, bn);
+  const min = Math.min(rn, gn, bn);
+  const l = (max + min) / 2;
+  if (max === min) return { h: 0, s: 0, l };
+  const d = max - min;
+  const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+  let h = 0;
+  if (max === rn) h = (gn - bn) / d + (gn < bn ? 6 : 0);
+  else if (max === gn) h = (bn - rn) / d + 2;
+  else h = (rn - gn) / d + 4;
+  return { h: h / 6, s, l };
+}
+
+function hslToRgb(h: number, s: number, l: number) {
+  const hue = (p: number, q: number, t: number) => {
+    let next = t;
+    if (next < 0) next += 1;
+    if (next > 1) next -= 1;
+    if (next < 1 / 6) return p + (q - p) * 6 * next;
+    if (next < 1 / 2) return q;
+    if (next < 2 / 3) return p + (q - p) * (2 / 3 - next) * 6;
+    return p;
+  };
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  const p = 2 * l - q;
+  const r = Math.round(hue(p, q, h + 1 / 3) * 255);
+  const g = Math.round(hue(p, q, h) * 255);
+  const b = Math.round(hue(p, q, h - 1 / 3) * 255);
+  return `rgb(${r} ${g} ${b})`;
+}
+
+function lightColor(
+  r: number,
+  g: number,
+  b: number,
+  tone: number,
+  hover: boolean,
+  detail: boolean,
+) {
+  const hsl = rgbToHsl(r, g, b);
+  if (detail) {
+    const warm = hsl.h < 0.16 || hsl.h > 0.9;
+    const sat =
+      hsl.s < 0.05 ? hsl.s : Math.min(0.94, (warm ? 0.38 : 0.24) + hsl.s);
+    const src = Math.max(hsl.l, Math.min(1, tone) * (warm ? 0.92 : 0.72));
+    const minL = warm ? 0.3 : 0.2;
+    const maxL = warm ? 0.58 : 0.46;
+    const lightness = minL + Math.pow(src, 0.8) * (maxL - minL);
+    return hslToRgb(hsl.h, sat, hover ? Math.min(0.66, lightness + 0.08) : lightness);
+  }
+  const sat = hsl.s < 0.06 ? hsl.s : Math.min(0.74, hsl.s * 1.1 + 0.05);
+  const src = hsl.l * 0.3 + Math.min(1, tone) * 0.7;
+  const lightness = (hover ? 0.18 : 0.1) + Math.pow(src, 0.92) * (hover ? 0.48 : 0.42);
+  return hslToRgb(hsl.h, sat, lightness);
+}
+
+function cellFill(
+  cell: Cell,
+  hover: boolean,
+  vivid = false,
+  detail = false,
+  light = false,
+) {
   const { r, g, b, luma: t } = cell;
+  if (light) return lightColor(r, g, b, t, hover, detail);
   const shade = vivid
     ? hover
       ? 1.14 + t * 0.22
@@ -280,9 +353,9 @@ function paintBase(grid: Grid) {
     for (let x = 0; x < cols; x++) {
       const cell = cells[y * cols + x];
       if (!cell || cell.knockout) continue;
-      const char = cellChar(cell);
+      const char = cellChar(cell, grid.light, grid.detail);
       if (char === " ") continue;
-      ctx.fillStyle = cellFill(cell, false, grid.vivid, grid.detail);
+      ctx.fillStyle = cellFill(cell, false, grid.vivid, grid.detail, grid.light);
       ctx.fillText(char, x * cssCellW, y * cssCellH);
     }
   }
@@ -377,7 +450,7 @@ export default function AsciiCity({
         for (let col = colStart; col <= colEnd; col++) {
           const cell = grid.cells[row * grid.cols + col];
           if (!cell || cell.knockout) continue;
-          const char = cellChar(cell);
+          const char = cellChar(cell, grid.light, grid.detail);
           if (char === " ") continue;
 
           const cx = (col + 0.5) * grid.cellW;
@@ -389,7 +462,7 @@ export default function AsciiCity({
 
           if (dist > localRadius) continue;
 
-          ctx.fillStyle = cellFill(cell, true, grid.vivid, grid.detail);
+          ctx.fillStyle = cellFill(cell, true, grid.vivid, grid.detail, grid.light);
           ctx.fillText(char, col * cssCellW, row * cssCellH);
         }
       }
@@ -456,6 +529,7 @@ export default function AsciiCity({
         dpr,
         vivid: knockout,
         detail,
+        light: isLightTheme(),
       };
       gridRef.current = grid;
       baseRef.current = paintBase(grid);
@@ -537,11 +611,18 @@ export default function AsciiCity({
     });
     ro.observe(wrap);
 
+    const onTheme = () => {
+      if (cancelled || !img) return;
+      void build(img);
+    };
+    window.addEventListener("techcity-theme", onTheme);
+
     return () => {
       cancelled = true;
       cancelAnimationFrame(rafRef.current);
       ro.disconnect();
       io?.disconnect();
+      window.removeEventListener("techcity-theme", onTheme);
     };
   }, [build, renderFrame, revealOnView, src]);
 

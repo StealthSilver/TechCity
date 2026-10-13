@@ -269,7 +269,7 @@ function InsightsChart({ panel }: { panel: InsightPanelData }) {
 
         {active !== null && marker ? (
           <div
-            className="pointer-events-none absolute top-3 z-10 min-w-40 border border-foreground/15 bg-background px-3 py-2"
+            className="pointer-events-none absolute top-3 z-10 min-w-40 max-w-[min(16rem,calc(100%-1.5rem))] border border-foreground/15 bg-background px-3 py-2 max-lg:min-w-0"
             style={{ left: `${xPct}%`, transform: tooltipShift }}
           >
             <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-foreground/45">
@@ -310,9 +310,9 @@ function InsightsPanel({ panel }: { panel: InsightPanelData }) {
 
   return (
     <div className="border border-foreground/10">
-      <h3 className="border-b border-foreground/10 px-4 py-5 text-[1.7rem] font-normal leading-none tracking-tight text-foreground sm:px-5">
+      <h3 className="border-b border-foreground/10 px-4 py-5 text-[1.45rem] font-normal leading-tight tracking-tight text-foreground sm:px-5 sm:text-[1.7rem] sm:leading-none">
         {panel.title}
-        <sup className="ml-2 font-mono text-[11px] font-normal tracking-[0.14em] text-foreground/45">
+        <sup className="mt-2 ml-0 block max-w-full font-mono text-[10px] font-normal leading-5 tracking-[0.14em] whitespace-normal text-foreground/45 sm:ml-2 sm:mt-0 sm:inline sm:text-[11px]">
           {`(${range})`}
         </sup>
       </h3>
@@ -361,7 +361,7 @@ export function FacultySubjects() {
 
   return (
     <div className="border border-foreground/10">
-      <h3 className="border-b border-foreground/10 px-4 py-5 text-[1.7rem] font-normal leading-none tracking-tight text-foreground sm:px-5">
+      <h3 className="border-b border-foreground/10 px-4 py-5 text-[1.45rem] font-normal leading-tight tracking-tight text-foreground sm:px-5 sm:text-[1.7rem] sm:leading-none">
         Subjects
         <sup className="ml-2 font-mono text-[11px] font-normal tracking-[0.14em] text-foreground/45">
           {`${total.toLocaleString("en-US")} faculty`}
@@ -411,7 +411,7 @@ export function FacultyInsights({ index = "03" }: { index?: string }) {
           title="Faculty in the programs, June to October."
         />
         <p className="mt-5 max-w-xl text-[15px] leading-7 text-foreground/65">
-          College faculty, colleges, sessions, and workshops from June to October, drawn together. Faculty starts at 5 and is about 220 now.
+          Faculty starts at 5 and is about 220 now.
         </p>
 
         <div className="mt-12">
@@ -432,8 +432,8 @@ export default function ProgramInsights() {
           title="Students, hours, and classes."
         />
         <p className="mt-5 max-w-xl text-[15px] leading-7 text-foreground/65">
-          One term, on one chart. Students rise steadily. Hours and classes
-          move with the weeks that actually ran.
+          Students rise steadily. Hours and classes move with the weeks that
+          actually ran.
         </p>
 
         <div className="mt-12">

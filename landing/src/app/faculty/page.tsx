@@ -1,10 +1,13 @@
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
+import CtaLink from "@/components/CtaLink";
+import FacultyAvatar from "@/components/FacultyAvatar";
 import { FacultyInsights, FacultySubjects } from "@/components/ProgramInsights";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import SectionHeading from "@/components/SectionHeading";
 import { directors } from "@/data/directors";
+import { faculty } from "@/data/faculty";
 
 export const metadata: Metadata = {
   title: "Faculty",
@@ -39,7 +42,7 @@ export default function FacultyPage() {
                 are co-founders.
               </p>
             </div>
-            <ul className="grid grid-cols-2 gap-px bg-foreground/10 sm:grid-cols-4 lg:max-w-xl">
+            <ul className="grid grid-cols-2 gap-px bg-foreground/10 md:grid-cols-4 lg:max-w-xl">
               {marks.map((mark) => (
                 <li key={mark.label} className="bg-background px-4 py-4 sm:px-5">
                   <p className="text-3xl tracking-tight text-foreground">
@@ -68,7 +71,8 @@ export default function FacultyPage() {
                     alt={director.imageAlt}
                     width={112}
                     height={112}
-                    className="size-24 shrink-0 object-cover sm:size-28"
+                    className="size-16 shrink-0 object-cover min-[420px]:size-24 sm:size-28"
+                    style={{ objectPosition: director.imagePosition }}
                   />
                   <div className="min-w-0">
                     <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/45">
@@ -111,9 +115,64 @@ export default function FacultyPage() {
         </section>
 
         <section className="border-t border-foreground/10">
+          <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:py-[4.5rem]">
+            <div className="fade-up flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+              <div className="max-w-2xl">
+                <SectionHeading
+                  index="03"
+                  label="Faculty"
+                  title="People teaching the programs."
+                />
+              </div>
+              <CtaLink href="/faculty/profiles" className="self-start">
+                Faculty profiles
+              </CtaLink>
+            </div>
+
+            <ul className="mt-12 grid gap-px bg-foreground/10 sm:grid-cols-2 lg:grid-cols-3">
+              {faculty.map((person, index) => (
+                <li
+                  key={person.slug}
+                  className="fade-up bg-background"
+                  style={{ "--fade-delay": `${index * 40}ms` } as CSSProperties}
+                >
+                  <a
+                    href={`/faculty/${person.slug}`}
+                    className="group flex h-full flex-col px-5 py-6 transition-colors hover:bg-foreground/[0.03] sm:px-6 sm:py-7"
+                  >
+                    <div className="flex items-start gap-4">
+                      <FacultyAvatar name={person.name} className="size-16" />
+                      <div className="min-w-0">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
+                          {String(index + 1).padStart(2, "0")}
+                          <span className="mx-2 text-foreground/20">/</span>
+                          <span className="text-foreground/45">{person.subject}</span>
+                        </p>
+                        <h3 className="mt-2 text-lg font-normal tracking-tight text-foreground">
+                          {person.name}
+                        </h3>
+                        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-foreground/45">
+                          {person.campus}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="mt-5 text-sm leading-6 text-foreground/65">
+                      {person.summary}
+                    </p>
+                    <span className="mt-6 font-mono text-[10px] uppercase tracking-[0.16em] text-accent-secondary transition-colors group-hover:text-foreground">
+                      Profile
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section className="border-t border-foreground/10">
           <div className="fade-up mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:py-[4.5rem]">
             <SectionHeading
-              index="03"
+              index="04"
               label="Subjects"
               title="Where the faculty teach."
             />
@@ -128,7 +187,7 @@ export default function FacultyPage() {
           </div>
         </section>
 
-        <FacultyInsights index="04" />
+        <FacultyInsights index="05" />
       </main>
       <Footer />
     </div>

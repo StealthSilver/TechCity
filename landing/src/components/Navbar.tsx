@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState, type MouseEvent } from "react";
-import CtaLink from "@/components/CtaLink";
+import { PartnerCta } from "@/components/PartnerApply";
 
 const links = [
   {
@@ -19,6 +19,7 @@ const links = [
     href: "/projects",
     label: "Projects",
     children: [
+      { href: "/projects/upcoming", label: "Upcoming" },
       { href: "/projects/ongoing", label: "Ongoing" },
       { href: "/projects/completed", label: "Completed" },
     ],
@@ -55,21 +56,15 @@ function Chevron({ open, className = "" }: { open?: boolean; className?: string 
 function StudentsLink({
   onClick,
   className = "",
-  light = false,
 }: {
   onClick?: () => void;
   className?: string;
-  light?: boolean;
 }) {
   return (
     <a
       href="/students"
       onClick={onClick}
-      className={`group inline-flex h-8 shrink-0 items-center justify-center border bg-transparent px-4 text-[13px] font-medium transition-colors duration-300 ${
-        light
-          ? "border-[#141414] text-[#141414] hover:bg-[#141414] hover:text-white"
-          : "border-white text-white hover:bg-white hover:text-background"
-      } ${className}`}
+      className={`group inline-flex h-8 shrink-0 items-center justify-center border border-foreground bg-transparent px-4 text-[13px] font-medium text-foreground transition-colors duration-300 hover:bg-foreground hover:text-background ${className}`}
     >
       For students
       <span className="inline-flex max-w-0 items-center overflow-hidden transition-all duration-300 ease-power4-in-out group-hover:ml-1.5 group-hover:max-w-4">
@@ -179,9 +174,7 @@ export default function Navbar({ theme = "dark" }: { theme?: "dark" | "light" })
             alt="TechCity"
             width={945}
             height={921}
-            className={`h-11 w-11 object-contain sm:h-12 sm:w-12 ${
-              light ? "invert hue-rotate-180" : ""
-            }`}
+            className="brand-mark h-11 w-11 object-contain sm:h-12 sm:w-12"
             priority
             unoptimized
           />
@@ -262,8 +255,8 @@ export default function Navbar({ theme = "dark" }: { theme?: "dark" | "light" })
           </ul>
 
           <div className="hidden items-center gap-5 lg:flex">
-            <StudentsLink light={light} />
-            <CtaLink href="/partners">Partner with us</CtaLink>
+            <StudentsLink />
+            <PartnerCta />
           </div>
 
           <button
@@ -288,8 +281,10 @@ export default function Navbar({ theme = "dark" }: { theme?: "dark" | "light" })
       </nav>
 
       <div
-        className={`overflow-hidden border-t border-foreground/10 bg-background/95 backdrop-blur-xl transition-[max-height,opacity] duration-300 lg:hidden ${
-          open ? "max-h-[32rem] opacity-100" : "max-h-0 opacity-0"
+        className={`border-t border-foreground/10 bg-background/95 backdrop-blur-xl transition-[max-height,opacity] duration-300 lg:hidden ${
+          open
+            ? "max-h-[calc(100svh-4.25rem)] overflow-y-auto opacity-100"
+            : "max-h-0 overflow-hidden opacity-0"
         }`}
         aria-hidden={!open}
         inert={!open ? true : undefined}
@@ -345,14 +340,8 @@ export default function Navbar({ theme = "dark" }: { theme?: "dark" | "light" })
             ),
           )}
           <li className="flex flex-col gap-4 pt-2">
-            <StudentsLink onClick={closeMenu} light={light} className="w-full" />
-            <CtaLink
-              href="/partners"
-              onClick={closeMenu}
-              className="flex w-full"
-            >
-              Partner with us
-            </CtaLink>
+            <StudentsLink onClick={closeMenu} className="w-full" />
+            <PartnerCta onOpen={closeMenu} className="flex w-full" />
           </li>
         </ul>
       </div>

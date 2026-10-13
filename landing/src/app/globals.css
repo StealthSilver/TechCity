@@ -6,6 +6,17 @@
   --accent: #4368b5;
   --accent-secondary: #71eaab;
   --on-accent: #f6f9fd;
+  --on-accent-secondary: #0d0d0d;
+}
+
+html[data-theme="light"] {
+  --background: #f4f1ea;
+  --foreground: #1c1b19;
+  --accent: #2a4a8f;
+  --accent-secondary: #0b6348;
+  --on-accent: #f7f4ee;
+  --on-accent-secondary: #f7f4ee;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -32,9 +43,20 @@ html {
   color-scheme: light;
 }
 
-html:has(.student-page),
+html:has(.student-page) {
+  --background: #f4f1ea;
+  --foreground: #1c1b19;
+  --accent: #2a4a8f;
+  --accent-secondary: #0b6348;
+  --on-accent: #f7f4ee;
+  --on-accent-secondary: #f7f4ee;
+  color-scheme: light;
+  background: var(--background);
+}
+
 html:has(.student-page) body {
-  background: #ffffff;
+  background: var(--background);
+  color: var(--foreground);
   color-scheme: light;
 }
 
@@ -42,6 +64,104 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
+  transition: background-color 280ms ease, color 280ms ease;
+}
+
+html[data-theme="light"] .brand-mark,
+html:has(.student-page) .brand-mark {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.hero-copy-wash {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--background) 78%, transparent) 0%,
+    color-mix(in srgb, var(--background) 42%, transparent) 46%,
+    transparent 78%
+  );
+}
+
+html[data-theme="light"] .hero-copy-wash {
+  width: min(100%, 64rem);
+  background: linear-gradient(
+    90deg,
+    var(--background) 0%,
+    color-mix(in srgb, var(--background) 96%, transparent) 52%,
+    color-mix(in srgb, var(--background) 70%, transparent) 74%,
+    transparent 100%
+  );
+}
+
+.hero-copy-scrim {
+  display: none;
+}
+
+html[data-theme="light"] .hero-copy-scrim {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--background) 98%, transparent) 0%,
+    color-mix(in srgb, var(--background) 96%, transparent) 82%,
+    transparent 100%
+  );
+}
+
+html[data-theme="light"] .hero-lead {
+  color: var(--foreground);
+}
+
+@media (max-width: 1023px) {
+  .hero-copy-wash {
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      color-mix(in srgb, var(--background) 55%, transparent) 12%,
+      color-mix(in srgb, var(--background) 90%, transparent) 28%,
+      color-mix(in srgb, var(--background) 94%, transparent) 100%
+    );
+  }
+
+  html[data-theme="light"] .hero-copy-wash {
+    width: 100%;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      color-mix(in srgb, var(--background) 82%, transparent) 10%,
+      var(--background) 24%,
+      var(--background) 100%
+    );
+  }
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: color-mix(in srgb, var(--foreground) 45%, transparent);
+}
+
+.theme-toggle:hover {
+  color: var(--foreground);
+}
+
+.theme-toggle svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.theme-toggle-to-light,
+.theme-toggle-to-dark {
+  display: none;
+}
+
+html:not([data-theme="light"]) .theme-toggle-to-light,
+html[data-theme="light"] .theme-toggle-to-dark {
+  display: block;
 }
 
 @keyframes marquee-up {
@@ -98,5 +218,147 @@ body {
 ::selection {
   background: color-mix(in srgb, var(--accent) 40%, transparent);
   color: var(--foreground);
+}
+
+.projects-map .leaflet-container {
+  height: 100%;
+  width: 100%;
+  background: var(--background);
+  font-family: inherit;
+}
+
+@media (max-width: 767px) {
+  .projects-map.h-auto .leaflet-container {
+    height: 18rem;
+  }
+}
+
+.projects-map .leaflet-tooltip {
+  border: 1px solid color-mix(in srgb, var(--foreground) 16%, transparent);
+  border-radius: 0;
+  background: var(--background);
+  color: var(--foreground);
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
+.projects-map .leaflet-tooltip-top:before {
+  border-top-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.projects-map .leaflet-container img,
+.projects-map .leaflet-container svg {
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.projects-map .leaflet-control-attribution {
+  background: transparent;
+  color: color-mix(in srgb, var(--foreground) 45%, transparent);
+  font-size: 10px;
+}
+
+.projects-map .leaflet-bar a {
+  background: var(--background);
+  color: var(--foreground);
+  border-color: color-mix(in srgb, var(--foreground) 15%, transparent);
+}
+
+.projects-map .leaflet-div-icon {
+  background: transparent;
+  border: 0;
+}
+
+.projects-map .leaflet-popup-content-wrapper,
+.projects-map .leaflet-popup-tip {
+  background: var(--background);
+  color: var(--foreground);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.projects-map .leaflet-popup-content-wrapper {
+  border: 1px solid color-mix(in srgb, var(--foreground) 16%, transparent);
+  padding: 0;
+}
+
+.projects-map .leaflet-popup-content {
+  margin: 0;
+  width: 280px !important;
+  line-height: 1.4;
+}
+
+@media (max-width: 1023px) {
+  .projects-map .leaflet-popup-content {
+    width: min(16.5rem, calc(100vw - 5rem)) !important;
+  }
+}
+
+.projects-map .leaflet-popup-close-button {
+  color: var(--foreground) !important;
+  font-size: 18px;
+  padding: 8px 8px 0 0;
+}
+
+.projects-map .map-popup {
+  padding: 16px 16px 14px;
+}
+
+.projects-map .map-popup-kicker {
+  margin: 0;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.projects-map .map-popup-title {
+  margin: 8px 28px 0 0;
+  font-size: 16px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.projects-map .map-popup-place,
+.projects-map .map-popup-term {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: color-mix(in srgb, var(--foreground) 62%, transparent);
+}
+
+.projects-map .map-popup-body {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--foreground) 78%, transparent);
+}
+
+.projects-map .map-popup-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.projects-map .map-popup-details,
+.projects-map .map-popup-apply {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.projects-map .map-popup-details {
+  border: 1px solid color-mix(in srgb, var(--foreground) 18%, transparent);
+  color: var(--foreground);
+}
+
+.projects-map .map-popup-apply {
+  background: var(--accent);
+  color: var(--on-accent);
 }
 

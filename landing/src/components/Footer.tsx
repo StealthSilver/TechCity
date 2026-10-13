@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, type PointerEvent } from "react";
 import AsciiCity from "@/components/AsciiCity";
-import CtaLink from "@/components/CtaLink";
+import { PartnerCta } from "@/components/PartnerApply";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const nav = [
   { href: "/", label: "Home" },
@@ -18,10 +19,10 @@ const FOLLOW_EASE = 0.07;
 
 function FooterBar() {
   return (
-    <div className="mx-auto flex max-w-7xl items-end justify-between gap-4 px-5 py-6 sm:px-8 lg:py-8">
+    <div className="mx-auto flex max-w-7xl flex-col items-start gap-6 px-5 py-6 sm:px-8 md:flex-row md:items-end md:justify-between md:gap-4 lg:py-8">
       <div className="pointer-events-auto flex flex-col items-start gap-3">
-        <CtaLink href="/partners">Partner with us</CtaLink>
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+        <PartnerCta />
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <a
             href="/privacy-policy"
             className="font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/40 transition-colors hover:text-foreground"
@@ -34,9 +35,10 @@ function FooterBar() {
           >
             Terms and Conditions
           </a>
+          <ThemeToggle />
         </div>
       </div>
-      <div className="pointer-events-auto flex flex-col items-end gap-2 text-right sm:gap-3">
+      <div className="pointer-events-auto flex flex-col items-start gap-2 text-left sm:gap-3 md:items-end md:text-right">
         <p className="max-w-[16rem] text-[11px] leading-5 text-foreground/55">
           TechCity Hub, Level 4, Cyber City 400001
         </p>
