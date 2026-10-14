@@ -45,9 +45,9 @@ function themePins(): Record<ProjectStatus, string> {
   const read = (name: string, fallback: string) =>
     style.getPropertyValue(name).trim() || fallback;
   return {
-    current: read("--accent", "#4368b5"),
-    upcoming: read("--accent-secondary", "#71eaab"),
-    completed: read("--foreground", "#f6f9fd"),
+    current: read("--accent", "#4677e2"),
+    upcoming: read("--accent-secondary", "#f59e0b"),
+    completed: read("--foreground", "#f4f7fb"),
   };
 }
 

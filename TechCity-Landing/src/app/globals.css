@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0d0d0d;
-  --foreground: #f6f9fd;
-  --accent: #4368b5;
-  --accent-secondary: #71eaab;
-  --on-accent: #f6f9fd;
-  --on-accent-secondary: #0d0d0d;
+  --background: #090b10;
+  --foreground: #f4f7fb;
+  --accent: #4677e2;
+  --accent-secondary: #f59e0b;
+  --on-accent: #f7f9ff;
+  --on-accent-secondary: #1c1406;
 }
 
 html[data-theme="light"] {
-  --background: #f3f6fb;
-  --foreground: #1c1b19;
-  --accent: #2a4a8f;
-  --accent-secondary: #0b6348;
-  --on-accent: #f7f4ee;
-  --on-accent-secondary: #f7f4ee;
+  --background: #f7f5f1;
+  --foreground: #1a1916;
+  --accent: #3b63c4;
+  --accent-secondary: #b45309;
+  --on-accent: #f7f9ff;
+  --on-accent-secondary: #fffaf3;
   color-scheme: light;
 }
 
@@ -44,12 +44,12 @@ html {
 }
 
 html:has(.student-page) {
-  --background: #f3f6fb;
-  --foreground: #1c1b19;
-  --accent: #2a4a8f;
-  --accent-secondary: #0b6348;
-  --on-accent: #f7f4ee;
-  --on-accent-secondary: #f7f4ee;
+  --background: #f7f5f1;
+  --foreground: #1a1916;
+  --accent: #3b63c4;
+  --accent-secondary: #b45309;
+  --on-accent: #f7f9ff;
+  --on-accent-secondary: #fffaf3;
   color-scheme: light;
   background: var(--background);
 }
@@ -65,11 +65,6 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   transition: background-color 280ms ease, color 280ms ease;
-}
-
-html[data-theme="light"] .brand-mark,
-html:has(.student-page) .brand-mark {
-  filter: invert(1) hue-rotate(180deg);
 }
 
 .hero-copy-wash {
