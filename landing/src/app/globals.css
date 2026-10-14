@@ -10,7 +10,7 @@
 }
 
 html[data-theme="light"] {
-  --background: #f4f1ea;
+  --background: #f3f6fb;
   --foreground: #1c1b19;
   --accent: #2a4a8f;
   --accent-secondary: #0b6348;
@@ -44,7 +44,7 @@ html {
 }
 
 html:has(.student-page) {
-  --background: #f4f1ea;
+  --background: #f3f6fb;
   --foreground: #1c1b19;
   --accent: #2a4a8f;
   --accent-secondary: #0b6348;
@@ -82,12 +82,11 @@ html:has(.student-page) .brand-mark {
 }
 
 html[data-theme="light"] .hero-copy-wash {
-  width: min(100%, 64rem);
+  width: min(100%, 46rem);
   background: linear-gradient(
     90deg,
-    var(--background) 0%,
-    color-mix(in srgb, var(--background) 96%, transparent) 52%,
-    color-mix(in srgb, var(--background) 70%, transparent) 74%,
+    color-mix(in srgb, var(--background) 82%, transparent) 0%,
+    color-mix(in srgb, var(--background) 48%, transparent) 46%,
     transparent 100%
   );
 }
@@ -100,8 +99,8 @@ html[data-theme="light"] .hero-copy-scrim {
   display: block;
   background: linear-gradient(
     90deg,
-    color-mix(in srgb, var(--background) 98%, transparent) 0%,
-    color-mix(in srgb, var(--background) 96%, transparent) 82%,
+    color-mix(in srgb, var(--background) 94%, transparent) 0%,
+    color-mix(in srgb, var(--background) 88%, transparent) 72%,
     transparent 100%
   );
 }
@@ -126,8 +125,9 @@ html[data-theme="light"] .hero-lead {
     background: linear-gradient(
       180deg,
       transparent 0%,
-      color-mix(in srgb, var(--background) 82%, transparent) 10%,
-      var(--background) 24%,
+      color-mix(in srgb, var(--background) 28%, transparent) 16%,
+      color-mix(in srgb, var(--background) 78%, transparent) 46%,
+      var(--background) 68%,
       var(--background) 100%
     );
   }

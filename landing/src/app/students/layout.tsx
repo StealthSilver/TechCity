@@ -2,7 +2,7 @@ import type { Viewport } from "next";
 import StudentNav from "@/components/StudentNav";
 
 export const viewport: Viewport = {
-  themeColor: "#f4f1ea",
+  themeColor: "#f3f6fb",
   colorScheme: "light",
 };
 

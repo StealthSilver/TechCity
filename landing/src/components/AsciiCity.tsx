@@ -86,43 +86,110 @@ function coverCrop(
   return { sx: 0, sy: (imgH - sh) * biasY, sw: imgW, sh };
 }
 
+type SourceRect = { x: number; y: number; w: number; h: number };
+
+const boundsCache = new WeakMap<HTMLImageElement, SourceRect>();
+
+function opaqueBounds(img: HTMLImageElement): SourceRect {
+  const cached = boundsCache.get(img);
+  if (cached) return cached;
+  const full = { x: 0, y: 0, w: img.width, h: img.height };
+  const probe = document.createElement("canvas");
+  probe.width = img.width;
+  probe.height = img.height;
+  const probeCtx = probe.getContext("2d", { willReadFrequently: true });
+  if (!probeCtx) return full;
+  probeCtx.drawImage(img, 0, 0);
+  const data = probeCtx.getImageData(0, 0, img.width, img.height).data;
+  let minX = img.width;
+  let minY = img.height;
+  let maxX = 0;
+  let maxY = 0;
+  for (let y = 0; y < img.height; y++) {
+    for (let x = 0; x < img.width; x++) {
+      const o = (y * img.width + x) * 4;
+      if (data[o + 3] < 18) continue;
+      const l = 0.2126 * data[o] + 0.7152 * data[o + 1] + 0.0722 * data[o + 2];
+      if (l < 18) continue;
+      if (x < minX) minX = x;
+      if (y < minY) minY = y;
+      if (x > maxX) maxX = x;
+      if (y > maxY) maxY = y;
+    }
+  }
+  if (maxX < minX || maxY < minY) {
+    boundsCache.set(img, full);
+    return full;
+  }
+  const padX = Math.round((maxX - minX) * 0.03);
+  const padY = Math.round((maxY - minY) * 0.06);
+  const x = Math.max(0, minX - padX);
+  const y = Math.max(0, minY - padY);
+  const bounds = {
+    x,
+    y,
+    w: Math.min(img.width - 1, maxX + padX) - x + 1,
+    h: Math.min(img.height - 1, maxY + padY) - y + 1,
+  };
+  boundsCache.set(img, bounds);
+  return bounds;
+}
+
+function drawContained(
+  ctx: CanvasRenderingContext2D,
+  img: HTMLImageElement,
+  cols: number,
+  rows: number,
+  options: { cropX: number; cropY: number },
+  src: SourceRect,
+) {
+  const imageRatio = src.w / src.h;
+  const marginX = cols * 0.05;
+  const marginY = rows * 0.04;
+  const boxW = Math.max(1, cols - marginX * 2);
+  const boxH = Math.max(1, rows - marginY * 2);
+  const canvasRatio = boxW / boxH;
+  const dw = imageRatio > canvasRatio ? boxW : boxH * imageRatio;
+  const dh = imageRatio > canvasRatio ? boxW / imageRatio : boxH;
+  const dx = marginX + (boxW - dw) * options.cropX;
+  const dy = marginY + (boxH - dh) * options.cropY;
+  ctx.clearRect(0, 0, cols, rows);
+  ctx.drawImage(
+    img,
+    src.x,
+    src.y,
+    src.w,
+    src.h,
+    dx,
+    dy,
+    Math.max(1, dw),
+    Math.max(1, dh),
+  );
+}
+
 function drawSource(
   ctx: CanvasRenderingContext2D,
   img: HTMLImageElement,
   cols: number,
   rows: number,
-  options: { cropX: number; cropY: number; fit: "cover" | "contain" },
+  options: {
+    cropX: number;
+    cropY: number;
+    fit: "cover" | "contain";
+    knockout?: boolean;
+  },
 ) {
+  if (options.knockout) {
+    drawContained(ctx, img, cols, rows, options, opaqueBounds(img));
+    return;
+  }
   if (options.fit === "contain") {
-    const imageRatio = img.width / img.height;
-    const canvasRatio = cols / rows;
-    let dw: number;
-    let dh: number;
-    let dx: number;
-    let dy: number;
-    if (imageRatio > canvasRatio) {
-      dw = cols;
-      dh = cols / imageRatio;
-      dx = 0;
-      dy = (rows - dh) * options.cropY;
-    } else {
-      dh = rows;
-      dw = rows * imageRatio;
-      dx = (cols - dw) * options.cropX;
-      dy = 0;
-    }
-    ctx.clearRect(0, 0, cols, rows);
-    ctx.drawImage(
-      img,
-      0,
-      0,
-      img.width,
-      img.height,
-      dx,
-      dy,
-      Math.max(1, dw),
-      Math.max(1, dh),
-    );
+    drawContained(ctx, img, cols, rows, options, {
+      x: 0,
+      y: 0,
+      w: img.width,
+      h: img.height,
+    });
     return;
   }
 
@@ -145,9 +212,20 @@ function percentile(sorted: number[], p: number) {
   return sorted[i];
 }
 
+function contrastTone(tone: number) {
+  const t = Math.min(1, Math.max(0, tone));
+  return t < 0.5
+    ? Math.pow(t * 2, 1.2) / 2
+    : 1 - Math.pow((1 - t) * 2, 1.2) / 2;
+}
+
 function cellChar(cell: Cell, light = false, detail = false) {
   if (cell.knockout) return " ";
-  const tone = light && !detail ? Math.pow(cell.luma, 0.42) : cell.luma;
+  const tone = light
+    ? detail
+      ? contrastTone(cell.luma)
+      : Math.pow(cell.luma, 0.72)
+    : cell.luma;
   const idx = Math.min(RAMP_LAST, Math.floor(tone * RAMP_LAST + 0.0001));
   return RAMP[idx];
 }
@@ -196,19 +274,28 @@ function lightColor(
   detail: boolean,
 ) {
   const hsl = rgbToHsl(r, g, b);
+  const t = Math.min(1, Math.max(0, tone));
   if (detail) {
     const warm = hsl.h < 0.16 || hsl.h > 0.9;
     const sat =
-      hsl.s < 0.05 ? hsl.s : Math.min(0.94, (warm ? 0.38 : 0.24) + hsl.s);
-    const src = Math.max(hsl.l, Math.min(1, tone) * (warm ? 0.92 : 0.72));
-    const minL = warm ? 0.3 : 0.2;
-    const maxL = warm ? 0.58 : 0.46;
-    const lightness = minL + Math.pow(src, 0.8) * (maxL - minL);
-    return hslToRgb(hsl.h, sat, hover ? Math.min(0.66, lightness + 0.08) : lightness);
+      hsl.s < 0.04
+        ? 0.08
+        : Math.min(0.92, (warm ? 0.52 : 0.36) + hsl.s * 0.72);
+    const shaped = Math.pow(t, 0.72);
+    const minL = warm ? 0.08 : 0.045;
+    const maxL = warm ? 0.5 : 0.4;
+    const lightness = maxL - shaped * (maxL - minL);
+    return hslToRgb(
+      hsl.h,
+      hover ? Math.min(0.96, sat + 0.08) : sat,
+      hover ? Math.max(minL, lightness - 0.05) : lightness,
+    );
   }
-  const sat = hsl.s < 0.06 ? hsl.s : Math.min(0.74, hsl.s * 1.1 + 0.05);
-  const src = hsl.l * 0.3 + Math.min(1, tone) * 0.7;
-  const lightness = (hover ? 0.18 : 0.1) + Math.pow(src, 0.92) * (hover ? 0.48 : 0.42);
+  const sat = hsl.s < 0.06 ? hsl.s : Math.min(0.82, hsl.s * 1.15 + 0.08);
+  const shaped = Math.pow(t, 0.78);
+  const minL = hover ? 0.06 : 0.08;
+  const maxL = hover ? 0.36 : 0.32;
+  const lightness = maxL - shaped * (maxL - minL);
   return hslToRgb(hsl.h, sat, lightness);
 }
 
@@ -235,7 +322,7 @@ function cellFill(
   return `rgb(${Math.min(255, Math.round(r * shade))} ${Math.min(255, Math.round(g * shade))} ${Math.min(255, Math.round(b * shade))})`;
 }
 
-function sharpenDetail(cells: Cell[], cols: number, rows: number) {
+function sharpenDetail(cells: Cell[], cols: number, rows: number, light = false) {
   const src = cells.map((cell) => cell.luma);
   for (let y = 1; y < rows - 1; y++) {
     for (let x = 1; x < cols - 1; x++) {
@@ -256,7 +343,7 @@ function sharpenDetail(cells: Cell[], cols: number, rows: number) {
       const quietSky = c < 0.07 && Math.abs(edge) < 0.05;
       cells[i].luma = quietSky
         ? c
-        : Math.min(1, Math.max(0, c + edge * 1.15));
+        : Math.min(1, Math.max(0, c + edge * (light ? 1.7 : 1.15)));
     }
   }
 }
@@ -271,6 +358,7 @@ function sampleCells(
     fit: "cover" | "contain";
     knockout: boolean;
     detail: boolean;
+    light: boolean;
   },
 ): Cell[] {
   const off = document.createElement("canvas");
@@ -316,7 +404,7 @@ function sampleCells(
     cells[i].luma = t;
   }
 
-  if (options.detail) sharpenDetail(cells, cols, rows);
+  if (options.detail) sharpenDetail(cells, cols, rows, options.light);
 
   return cells;
 }
@@ -502,13 +590,18 @@ export default function AsciiCity({
       canvas.style.height = `${cssH}px`;
       sizeRef.current = { w: width, h: height, dpr };
 
+      const light = isLightTheme();
       const cols = detail
-        ? Math.round(Math.min(240, Math.max(100, cssW / 3.8)))
-        : Math.round(Math.min(180, Math.max(80, cssW / 5.1)));
+        ? Math.round(
+            Math.min(light ? 300 : 240, Math.max(light ? 150 : 100, cssW / (light ? 2.9 : 3.8))),
+          )
+        : Math.round(
+            Math.min(light ? 210 : 180, Math.max(light ? 96 : 80, cssW / (light ? 4.2 : 5.1))),
+          );
       const cellW = width / cols;
       const fontSize = detail
-        ? Math.max(5, (cellW / dpr) * 1.02)
-        : Math.max(7, (cellW / dpr) * 1.24);
+        ? Math.max(5, (cellW / dpr) * (light ? 1.2 : 1.02))
+        : Math.max(7, (cellW / dpr) * (light ? 1.34 : 1.24));
       const cellH = fontSize * dpr * (detail ? 1.06 : 0.88);
       const rows = Math.max(28, Math.floor(height / cellH));
       const family = monoFamily();
@@ -520,6 +613,7 @@ export default function AsciiCity({
           fit,
           knockout,
           detail,
+          light,
         }),
         cols,
         rows,
@@ -529,7 +623,7 @@ export default function AsciiCity({
         dpr,
         vivid: knockout,
         detail,
-        light: isLightTheme(),
+        light,
       };
       gridRef.current = grid;
       baseRef.current = paintBase(grid);

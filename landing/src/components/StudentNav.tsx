@@ -144,10 +144,10 @@ export default function StudentNav() {
       </nav>
 
       <div
-        className={`border-t border-foreground/10 bg-background/95 backdrop-blur-xl transition-[max-height,opacity] duration-300 lg:hidden ${
+        className={`absolute inset-x-0 top-full z-50 border-t border-foreground/10 bg-background/95 shadow-[0_24px_48px_rgba(0,0,0,0.18)] backdrop-blur-xl transition-[max-height,opacity] duration-300 lg:hidden ${
           open
             ? "max-h-[calc(100svh-4.25rem)] overflow-y-auto opacity-100"
-            : "max-h-0 overflow-hidden opacity-0"
+            : "pointer-events-none max-h-0 overflow-hidden opacity-0"
         }`}
         aria-hidden={!open}
         inert={!open ? true : undefined}

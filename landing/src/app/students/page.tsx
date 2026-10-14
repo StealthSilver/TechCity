@@ -6,7 +6,7 @@ import { studentProducts } from "@/data/student";
 export const metadata: Metadata = {
   title: "For students",
   description:
-    "Lessons, practice, a playground, and careers for students in TechCity programs.",
+    "LMS, roadmaps, Spardha, Code Arena, and learning for students in TechCity programs.",
 };
 
 export default function Students() {
@@ -20,11 +20,11 @@ export default function Students() {
             For students
           </p>
           <h1 className="mt-4 text-[2.35rem] font-normal leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[4.25rem]">
-            <span className="block">Lessons, practice,</span>
+            <span className="block">Lessons, contests,</span>
             <span className="block">and work you can show.</span>
           </h1>
           <p className="mt-7 max-w-lg text-base leading-7 text-foreground/65 sm:text-lg sm:leading-8">
-            Four tools for the programs your college already runs. Open a
+            Five places for the programs your college already runs. Open a
             lesson, try it, and keep what a hiring team can ask about.
           </p>
         </div>

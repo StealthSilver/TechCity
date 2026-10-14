@@ -97,7 +97,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col bg-background font-sans text-foreground">
         <Script id="theme-init" strategy="beforeInteractive">
-          {`try{var t=localStorage.getItem("techcity-theme");document.documentElement.dataset.theme=t==="light"?"light":"dark"}catch(e){document.documentElement.dataset.theme="dark"}`}
+          {`try{var t=localStorage.getItem("techcity-theme");document.documentElement.dataset.theme=t==="light"?"light":"dark"}catch(e){document.documentElement.dataset.theme="dark"}document.querySelectorAll("[data-cursor-ref]").forEach(function(el){el.removeAttribute("data-cursor-ref")})`}
         </Script>
         <PartnerApplyProvider>{children}</PartnerApplyProvider>
       </body>

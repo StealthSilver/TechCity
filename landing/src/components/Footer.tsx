@@ -121,29 +121,29 @@ function FooterHands() {
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
     >
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[min(21.6svh,13.2rem)] z-20 flex justify-between lg:top-[min(25.8svh,15.6rem)]">
+      <div className="pointer-events-none absolute inset-x-0 top-[30%] bottom-[22%] z-20 flex items-start justify-between sm:top-[26%] lg:top-[22%] lg:bottom-[26%]">
         <div
           ref={leftRef}
-          className="relative h-full w-[38%] will-change-transform"
+          className="relative h-full w-[46%] will-change-transform"
         >
           <AsciiCity
             src="/ascii-hand-left.png"
             cropX={0}
-            cropY={1}
-            fit="cover"
+            cropY={0}
+            fit="contain"
             knockout
             className="h-full w-full cursor-pointer pointer-events-auto"
           />
         </div>
         <div
           ref={rightRef}
-          className="relative h-full w-[38%] will-change-transform"
+          className="relative h-full w-[46%] will-change-transform"
         >
           <AsciiCity
             src="/ascii-hand-right.png"
             cropX={1}
-            cropY={1}
-            fit="cover"
+            cropY={0}
+            fit="contain"
             knockout
             className="h-full w-full cursor-pointer pointer-events-auto"
           />

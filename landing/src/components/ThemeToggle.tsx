@@ -13,7 +13,7 @@ export function applyTheme(theme: "light" | "dark") {
   }
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) {
-    meta.setAttribute("content", theme === "light" ? "#f4f1ea" : "#0d0d0d");
+    meta.setAttribute("content", theme === "light" ? "#f3f6fb" : "#0d0d0d");
   }
   window.dispatchEvent(new Event("techcity-theme"));
 }
