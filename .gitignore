@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Sibling apps (separate repos)
+/TechCity-RM/
+/TechCity-Spardha/
+/TechCity-Studio/
