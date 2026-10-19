@@ -30,11 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": [
-    "node_modules",
-    "TechCity-RM",
-    "TechCity-Spardha",
-    "TechCity-Studio",
-    "TechCity-Landing"
-  ]
+  "exclude": ["node_modules"]
 }
