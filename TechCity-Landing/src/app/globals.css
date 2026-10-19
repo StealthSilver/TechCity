@@ -10,7 +10,7 @@
 }
 
 html[data-theme="light"] {
-  --background: #f7f5f1;
+  --background: #ffffff;
   --foreground: #1a1916;
   --accent: #3b63c4;
   --accent-secondary: #b45309;
@@ -44,7 +44,7 @@ html {
 }
 
 html:has(.student-page) {
-  --background: #f7f5f1;
+  --background: #ffffff;
   --foreground: #1a1916;
   --accent: #3b63c4;
   --accent-secondary: #b45309;
@@ -80,8 +80,8 @@ html[data-theme="light"] .hero-copy-wash {
   width: min(100%, 46rem);
   background: linear-gradient(
     90deg,
-    color-mix(in srgb, var(--background) 82%, transparent) 0%,
-    color-mix(in srgb, var(--background) 48%, transparent) 46%,
+    color-mix(in srgb, var(--background) 22%, transparent) 0%,
+    color-mix(in srgb, var(--background) 10%, transparent) 42%,
     transparent 100%
   );
 }
@@ -94,8 +94,8 @@ html[data-theme="light"] .hero-copy-scrim {
   display: block;
   background: linear-gradient(
     90deg,
-    color-mix(in srgb, var(--background) 94%, transparent) 0%,
-    color-mix(in srgb, var(--background) 88%, transparent) 72%,
+    color-mix(in srgb, var(--background) 34%, transparent) 0%,
+    color-mix(in srgb, var(--background) 26%, transparent) 76%,
     transparent 100%
   );
 }
@@ -120,10 +120,9 @@ html[data-theme="light"] .hero-lead {
     background: linear-gradient(
       180deg,
       transparent 0%,
-      color-mix(in srgb, var(--background) 28%, transparent) 16%,
-      color-mix(in srgb, var(--background) 78%, transparent) 46%,
-      var(--background) 68%,
-      var(--background) 100%
+      color-mix(in srgb, var(--background) 14%, transparent) 18%,
+      color-mix(in srgb, var(--background) 32%, transparent) 48%,
+      color-mix(in srgb, var(--background) 38%, transparent) 100%
     );
   }
 }

@@ -46,10 +46,10 @@ export default function OngoingProjectsPage() {
               Join as a trainer.
             </h2>
             <p className="mt-4 max-w-xl text-sm leading-6 text-foreground/60">
-              A general application for trainer seats across the campuses we are
-              teaching on now.
+              Apply generally, or choose a project we are running now or opening
+              next.
             </p>
-            <TrainerApply general />
+            <TrainerApply />
           </div>
         </section>
       </main>

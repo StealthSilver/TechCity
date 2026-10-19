@@ -11,7 +11,7 @@ import { programFamilies } from "@/data/programs";
 export const metadata: Metadata = {
   title: "Programs",
   description:
-    "TechCity programs for colleges: trainers in software, data, AI, cloud, and security, plus faculty development, placement preparation, mentorship, and online lessons.",
+    "TechCity programs for colleges: trainers, faculty development, placement preparation, student placement, mentorship, online lessons, study material, and platforms a campus runs.",
 };
 
 export default function ProgramsPage() {
@@ -29,12 +29,9 @@ export default function ProgramsPage() {
             />
           </div>
 
-          <ul className="fade-up mt-12 grid gap-px bg-foreground/10 sm:grid-cols-2 lg:grid-cols-5">
+          <ul className="fade-up mt-12 grid gap-px bg-foreground/10 sm:grid-cols-2 lg:grid-cols-4">
             {programFamilies.map((family) => (
-              <li
-                key={family.id}
-                className="bg-background last:sm:col-span-2 last:lg:col-span-1"
-              >
+              <li key={family.id} className="bg-background">
                 <a
                   href={`#${family.id}`}
                   className="flex h-full flex-col px-4 py-5 transition-colors hover:bg-foreground/[0.03] sm:px-5"
@@ -84,7 +81,7 @@ export default function ProgramsPage() {
                 </p>
                 <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/40">
                   <span className="mr-2 text-2xl tracking-tight text-foreground">
-                    {family.programs.length}
+                    {family.count}
                   </span>
                   {family.countNoun}
                 </p>
@@ -122,8 +119,8 @@ export default function ProgramsPage() {
               </h2>
               <p className="mt-4 text-[15px] leading-7 text-foreground/65">
                 A trainer in the classroom, faculty sessions beside that
-                teaching, and placement, mentorship, and online lessons for
-                the same students.
+                teaching, and placement, mentorship, lessons, study material,
+                and platforms for the same campus.
               </p>
             </div>
             <PartnerCta className="self-start sm:self-auto" />

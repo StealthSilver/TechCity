@@ -9,19 +9,19 @@ export const metadata: Metadata = {
 
 const contact = (
   <>
-    TechCity Hub, Level 4, Cyber City 400001. Email{" "}
+    Email{" "}
     <a
-      href="mailto:hello@techcityskills.com"
+      href="mailto:techcityskillspvt.ltd@gmail.com"
       className="text-foreground underline decoration-foreground/25 underline-offset-4 transition-colors hover:decoration-foreground"
     >
-      hello@techcityskills.com
+      techcityskillspvt.ltd@gmail.com
     </a>{" "}
     or call{" "}
     <a
-      href="tel:+18001234567"
+      href="tel:+919650657821"
       className="text-foreground transition-colors hover:text-foreground"
     >
-      +1 (800) 123-4567
+      9650657821
     </a>.
   </>
 );

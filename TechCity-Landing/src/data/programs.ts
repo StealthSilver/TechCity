@@ -2,8 +2,11 @@ export const programFamilyIds = [
   "trainers",
   "faculty",
   "placement",
+  "placing",
   "mentorship",
   "online",
+  "content",
+  "platforms",
 ] as const;
 
 export type ProgramFamilyId = (typeof programFamilyIds)[number];
@@ -23,6 +26,7 @@ export type ProgramFamily = {
   figure: string;
   how: string;
   steps: [string, string, string];
+  count: string;
   countNoun: string;
   chips?: string[];
   programs: ProgramItem[];
@@ -39,6 +43,7 @@ export const programFamilies: ProgramFamily[] = [
     figure: "Subject for the day",
     how: "A trainer is placed on the campus for one subject and teaches it inside the college timetable. The lab follows a shared piece of work, and the trainer reviews it the way a teammate would.",
     steps: ["Campus", "Subject", "Review"],
+    count: "30+",
     countNoun: "subjects",
     chips: ["Software", "Data", "AI", "Cloud", "Security"],
     programs: [
@@ -79,6 +84,7 @@ export const programFamilies: ProgramFamily[] = [
     figure: "Syllabus and lab",
     how: "College faculty sit with TechCity trainers before they teach the same material. They rebuild a lab or a syllabus, rehearse it, then run that session with their own students.",
     steps: ["Trainers", "Rehearse", "Teach"],
+    count: "3",
     countNoun: "programs",
     programs: [
       {
@@ -108,6 +114,7 @@ export const programFamilies: ProgramFamily[] = [
     figure: "Hiring path",
     how: "Students practice the hiring path in the order companies use it. They start with a profile and timed work, then interviews, then one full loop from the application to the last conversation.",
     steps: ["Profile", "Practice", "Loop"],
+    count: "4",
     countNoun: "programs",
     programs: [
       {
@@ -133,8 +140,43 @@ export const programFamilies: ProgramFamily[] = [
     ],
   },
   {
-    id: "mentorship",
+    id: "placing",
     index: "04",
+    title: "Student placement",
+    line: "Students introduced to hiring partners once the campus work is ready to open.",
+    body: "TechCity places students with companies it already works with. The introduction follows the project and the interviews practiced on campus.",
+    audience: "Students",
+    figure: "From campus to a team",
+    how: "TechCity places a student with a company it already works with. The introduction follows the project and the interviews practiced on campus. The company reviews that work and runs its own process.",
+    steps: ["Work", "Introduce", "Place"],
+    count: "3",
+    countNoun: "domains",
+    programs: [
+      {
+        name: "Campus introductions",
+        detail:
+          "A student is put in front of a hiring partner TechCity already works with.",
+      },
+      {
+        name: "Project review",
+        detail:
+          "The company opens the work from the lab, not a slide about it.",
+      },
+      {
+        name: "Internship placement",
+        detail:
+          "A term with a partner team, tied to the subject the student just practiced.",
+      },
+      {
+        name: "First-role placement",
+        detail:
+          "The introduction for a full-time start, after the campus loop is done.",
+      },
+    ],
+  },
+  {
+    id: "mentorship",
+    index: "05",
     title: "Mentorship",
     line: "A practitioner who stays with the student after the lecture.",
     body: "Mentorship covers the questions a timetable does not. A working practitioner stays with a student or a cohort across the semester.",
@@ -142,6 +184,7 @@ export const programFamilies: ProgramFamily[] = [
     figure: "Across the semester",
     how: "A working practitioner stays with a student or a cohort for the semester. There is a standing time outside class to review work, a stuck lab, or the first weeks of a job.",
     steps: ["Mentor", "Semester", "Review"],
+    count: "5",
     countNoun: "programs",
     programs: [
       {
@@ -163,7 +206,7 @@ export const programFamilies: ProgramFamily[] = [
   },
   {
     id: "online",
-    index: "05",
+    index: "06",
     title: "Online lessons",
     line: "Live classes and lessons students can replay.",
     body: "When a trainer is shared across colleges, the lesson still happens. Students join live or replay it before a lab or an interview.",
@@ -171,7 +214,8 @@ export const programFamilies: ProgramFamily[] = [
     figure: "One live lesson",
     how: "A trainer teaches the lesson live, and students join from campus or from home. The recording stays with the cohort so they can replay it before a lab or an interview.",
     steps: ["Live", "Campus", "Replay"],
-    countNoun: "programs",
+    count: "10+",
+    countNoun: "subjects",
     programs: [
       {
         name: "Live virtual classrooms",
@@ -192,6 +236,81 @@ export const programFamilies: ProgramFamily[] = [
         name: "Campus relay classes",
         detail:
           "One trainer, live, with several colleges in the same session. Campuses share the lesson and keep their own lab time.",
+      },
+    ],
+  },
+  {
+    id: "content",
+    index: "07",
+    title: "Online content",
+    line: "Videos, notes, roadmaps, and assessments a student opens between classes.",
+    body: "Beside the live lesson, the same subject stays available to study alone. A video or a note covers the class, a roadmap shows what comes next, and an assessment checks it before the lab.",
+    audience: "Students",
+    figure: "Between classes",
+    how: "Beside the live lesson, the same subject stays available to study alone. A video or a note covers the class, a roadmap shows what comes next, and an assessment checks it before the lab.",
+    steps: ["Open", "Study", "Check"],
+    count: "4",
+    countNoun: "formats",
+    programs: [
+      {
+        name: "Videos",
+        detail:
+          "A recording of the subject the trainer teaches, so a student can watch it again before a lab.",
+      },
+      {
+        name: "Notes",
+        detail:
+          "The same lesson written down, for the part a student wants to read instead of replay.",
+      },
+      {
+        name: "Roadmaps",
+        detail:
+          "The order of a subject, from the first class to the work a hiring partner can open.",
+      },
+      {
+        name: "Assessments",
+        detail:
+          "A check on the subject before the lab, so the student knows what still needs work.",
+      },
+    ],
+  },
+  {
+    id: "platforms",
+    index: "08",
+    title: "Platforms for colleges",
+    line: "Systems built for a campus: learning, records, the college site, and assessment.",
+    body: "TechCity also builds the systems a college runs on. A campus names what it needs, and the same students use it beside the teaching.",
+    audience: "Colleges",
+    figure: "Built for the campus",
+    how: "A college names the system it needs. TechCity designs and builds it, and the campus runs teaching, records, or assessment on it.",
+    steps: ["Brief", "Build", "Run"],
+    count: "5",
+    countNoun: "platforms",
+    programs: [
+      {
+        name: "LMS for colleges",
+        detail:
+          "The place a campus runs lessons, labs, and the work students hand in.",
+      },
+      {
+        name: "ERP platforms",
+        detail:
+          "Records for students, faculty, and the semester, kept in one system the college runs.",
+      },
+      {
+        name: "Websites",
+        detail:
+          "The college site, built so a visitor can find a program, a faculty page, or how to enquire.",
+      },
+      {
+        name: "Assessment platforms",
+        detail:
+          "Tests and reviews a campus runs for a subject, with a result a faculty member can open.",
+      },
+      {
+        name: "Content platforms",
+        detail:
+          "Videos, notes, and roadmaps kept for a cohort, in the order the trainers teach them.",
       },
     ],
   },

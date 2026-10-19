@@ -54,7 +54,7 @@ export default function Partners() {
                 </CtaLink>
               </div>
               <ul className="mt-6 divide-y divide-foreground/10 border-y border-foreground/10">
-                {group.partners.slice(0, 4).map((partner) => (
+                {group.partners.slice(0, 5).map((partner) => (
                   <li key={partner.name}>
                     <a
                       href={group.href}

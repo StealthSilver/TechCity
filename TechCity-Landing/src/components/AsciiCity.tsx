@@ -275,28 +275,28 @@ function lightColor(
 ) {
   const hsl = rgbToHsl(r, g, b);
   const t = Math.min(1, Math.max(0, tone));
+  const warm = hsl.h < 0.16 || hsl.h > 0.9;
+  const shaped = Math.pow(t, detail ? 0.76 : 0.8);
+  if (hsl.s < 0.06) {
+    const lightness = (detail ? 0.5 : 0.48) - shaped * (detail ? 0.22 : 0.16);
+    return hslToRgb(0.08, detail ? 0.1 : 0.16, hover ? Math.max(0.22, lightness - 0.04) : lightness);
+  }
   if (detail) {
-    const warm = hsl.h < 0.16 || hsl.h > 0.9;
-    const sat =
-      hsl.s < 0.04
-        ? 0.08
-        : Math.min(0.92, (warm ? 0.52 : 0.36) + hsl.s * 0.72);
-    const shaped = Math.pow(t, 0.72);
-    const minL = warm ? 0.08 : 0.045;
-    const maxL = warm ? 0.5 : 0.4;
+    const sat = Math.min(0.84, (warm ? 0.5 : 0.4) + hsl.s * 0.85);
+    const minL = warm ? 0.32 : 0.3;
+    const maxL = warm ? 0.56 : 0.5;
     const lightness = maxL - shaped * (maxL - minL);
     return hslToRgb(
       hsl.h,
-      hover ? Math.min(0.96, sat + 0.08) : sat,
-      hover ? Math.max(minL, lightness - 0.05) : lightness,
+      hover ? Math.min(0.9, sat + 0.08) : sat,
+      hover ? Math.max(0.24, lightness - 0.04) : lightness,
     );
   }
-  const sat = hsl.s < 0.06 ? hsl.s : Math.min(0.82, hsl.s * 1.15 + 0.08);
-  const shaped = Math.pow(t, 0.78);
-  const minL = hover ? 0.06 : 0.08;
-  const maxL = hover ? 0.36 : 0.32;
+  const sat = Math.min(0.68, 0.42 + hsl.s * 0.4);
+  const minL = hover ? 0.28 : 0.32;
+  const maxL = hover ? 0.54 : 0.5;
   const lightness = maxL - shaped * (maxL - minL);
-  return hslToRgb(hsl.h, sat, lightness);
+  return hslToRgb(hsl.h, hover ? Math.min(0.76, sat + 0.06) : sat, lightness);
 }
 
 function cellFill(

@@ -171,8 +171,8 @@ const students = walk(termDates, 4380, 12640, 11, "steady");
 const hours = wave(termDates, 180, 920, 29);
 const classes = wave(termDates, 4, 28, 47);
 
-const faculty = walk(facultyDates, 5, 220, 3, "steppy");
-const colleges = walk(facultyDates, 2, 96, 8, "steppy");
+const faculty = walk(facultyDates, 5, 40, 3, "steppy");
+const colleges = walk(facultyDates, 2, 30, 8, "steppy");
 const sessions = wave(facultyDates, 420, 3100, 15);
 const workshops = wave(facultyDates, 40, 620, 21);
 
@@ -197,11 +197,11 @@ export const termPanel: InsightPanelData = {
 
 /** College faculty now, split across the five trainer subjects. */
 export const facultySubjects = [
-  { subject: "Software engineering", count: 62 },
-  { subject: "Artificial intelligence", count: 54 },
-  { subject: "Data and analytics", count: 41 },
-  { subject: "Cloud and DevOps", count: 36 },
-  { subject: "Cybersecurity", count: 27 },
+  { subject: "Software engineering", count: 11 },
+  { subject: "Artificial intelligence", count: 10 },
+  { subject: "Data and analytics", count: 7 },
+  { subject: "Cloud and DevOps", count: 7 },
+  { subject: "Cybersecurity", count: 5 },
 ] as const;
 
 export const facultyPanel: InsightPanelData = {
@@ -212,10 +212,10 @@ export const facultyPanel: InsightPanelData = {
   grain: "month",
   scale: "independent",
   metrics: [
-    { label: "Faculty", value: formatCount(220), change: changeBetween(faculty) },
-    { label: "Sessions", value: formatCount(35879), change: 8.6 },
-    { label: "Workshops", value: formatCount(6420), change: 11.2 },
-    { label: "Colleges", value: formatCount(96), change: changeBetween(colleges) },
+    { label: "Faculty", value: "40+", change: changeBetween(faculty) },
+    { label: "Sessions", value: "12,000+", change: 8.6 },
+    { label: "Workshops", value: "150+", change: 11.2 },
+    { label: "Colleges", value: "30+", change: changeBetween(colleges) },
   ],
   dates: facultyDates,
   lines: [

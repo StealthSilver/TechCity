@@ -1,8 +1,11 @@
 import type { CSSProperties, ComponentType } from "react";
 import {
+  Branches,
   Dish,
   Elevator,
+  Exploded,
   Format,
+  Phosphor,
   Relay,
   Riffle,
   type HairlineProps,
@@ -13,8 +16,11 @@ const figures: Record<ProgramFamilyId, ComponentType<HairlineProps>> = {
   trainers: Riffle,
   faculty: Format,
   placement: Elevator,
+  placing: Branches,
   mentorship: Relay,
   online: Dish,
+  content: Phosphor,
+  platforms: Exploded,
 };
 
 const figureStyle = {

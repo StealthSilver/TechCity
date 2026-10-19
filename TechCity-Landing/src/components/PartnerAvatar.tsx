@@ -40,7 +40,7 @@ export default function PartnerAvatar({
         <img
           src={logo}
           alt=""
-          className="max-h-full max-w-full object-contain"
+          className="h-full w-full min-h-0 min-w-0 object-contain"
         />
       </span>
     );

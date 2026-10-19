@@ -39,20 +39,17 @@ function FooterBar() {
         </div>
       </div>
       <div className="pointer-events-auto flex flex-col items-start gap-2 text-left sm:gap-3 md:items-end md:text-right">
-        <p className="max-w-[16rem] text-[11px] leading-5 text-foreground/55">
-          TechCity Hub, Level 4, Cyber City 400001
-        </p>
         <a
-          href="mailto:hello@techcityskills.com"
+          href="mailto:techcityskillspvt.ltd@gmail.com"
           className="w-fit text-[11px] text-foreground/55 underline decoration-foreground/25 underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground"
         >
-          hello@techcityskills.com
+          techcityskillspvt.ltd@gmail.com
         </a>
         <a
-          href="tel:+18001234567"
+          href="tel:+919650657821"
           className="w-fit text-[11px] text-foreground/55 transition-colors hover:text-foreground"
         >
-          +1 (800) 123-4567
+          9650657821
         </a>
       </div>
     </div>

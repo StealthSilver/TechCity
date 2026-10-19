@@ -12,14 +12,14 @@ import { faculty } from "@/data/faculty";
 export const metadata: Metadata = {
   title: "Faculty",
   description:
-    "Deepak Tripathi and Gunjan Soam, directors of TechCity Skills, on technology leadership, academic design, and how the programs run inside a college.",
+    "Deepak Tripathi and Gunjan Soam, directors of TechCity Skills. Deepak trains, mentors, and handles operations. Gunjan handles the technology, hiring, and the trainers.",
 };
 
 const marks = [
   { value: "2", label: "Directors" },
   { value: "15+", label: "Years of leadership" },
   { value: "10K+", label: "People mentored" },
-  { value: "200+", label: "Hiring and tech partners" },
+  { value: "50+", label: "Hiring and tech partners" },
 ];
 
 export default function FacultyPage() {
@@ -37,9 +37,9 @@ export default function FacultyPage() {
                 titleClassName="text-[2.35rem] sm:text-5xl"
               />
               <p className="mt-6 max-w-xl text-base leading-7 text-foreground/70">
-                One sets what is taught. The other holds the academic and
-                operating system that makes a program work on a campus. Both
-                are co-founders.
+                Deepak brings the experience, the network, and the training.
+                Gunjan holds the technology, the hiring, and the trainers.
+                Both are co-founders.
               </p>
             </div>
             <ul className="grid grid-cols-2 gap-px bg-foreground/10 md:grid-cols-4 lg:max-w-xl">
@@ -75,12 +75,8 @@ export default function FacultyPage() {
                     style={{ objectPosition: director.imagePosition }}
                   />
                   <div className="min-w-0">
-                    <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/45">
-                      <span className="text-accent">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <span className="mx-2 text-foreground/20">/</span>
-                      {director.kicker}
+                    <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
+                      {String(index + 1).padStart(2, "0")}
                     </p>
                     <h2 className="mt-3 text-[1.65rem] font-normal leading-[1.1] tracking-tight text-foreground sm:text-[1.85rem]">
                       {director.name}
@@ -88,16 +84,6 @@ export default function FacultyPage() {
                     <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-accent-secondary">
                       {director.role}
                     </p>
-                    <ul className="mt-4 flex flex-wrap gap-2">
-                      {director.focus.map((item) => (
-                        <li
-                          key={item}
-                          className="border border-foreground/15 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-foreground/65"
-                        >
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
                   </div>
                 </div>
                 <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground/40">
@@ -177,7 +163,7 @@ export default function FacultyPage() {
               title="Where the faculty teach."
             />
             <p className="mt-5 max-w-xl text-[15px] leading-7 text-foreground/65">
-              Of the 220 faculty in the programs now, the largest groups teach
+              Of the 40+ faculty in the programs now, the largest groups teach
               software and artificial intelligence. Data, cloud, and security
               make up the rest.
             </p>

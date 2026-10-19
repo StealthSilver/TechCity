@@ -411,7 +411,7 @@ export function FacultyInsights({ index = "03" }: { index?: string }) {
           title="Faculty in the programs, June to October."
         />
         <p className="mt-5 max-w-xl text-[15px] leading-7 text-foreground/65">
-          Faculty starts at 5 and is about 220 now.
+          Faculty starts at 5 and is 40+ now.
         </p>
 
         <div className="mt-12">

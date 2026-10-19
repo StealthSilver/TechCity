@@ -12,11 +12,11 @@ export default function Programs() {
             <SectionHeading
               index="02"
               label="Programs"
-              title="Five programs on one campus."
+              title="Eight ways TechCity works with a campus."
             />
             <p className="mt-5 max-w-xl text-[15px] leading-7 text-foreground/65">
-              A trainer, faculty development, placement, mentorship, and online
-              lessons, for the same students.
+              Trainers, faculty, placement, mentorship, lessons, study
+              material, and the systems a college runs.
             </p>
           </div>
           <CtaLink href="/programs" className="self-start">
@@ -52,14 +52,14 @@ export default function Programs() {
                   </span>
                   <span className="mt-2 block font-mono text-[10px] uppercase tracking-[0.14em] text-foreground/40 md:hidden">
                     <span className="mr-1.5 text-xl tabular-nums tracking-tight text-foreground">
-                      {family.programs.length}
+                      {family.count}
                     </span>
                     {family.countNoun}
                   </span>
                 </span>
                 <span className="hidden font-mono text-[10px] uppercase tracking-[0.14em] text-foreground/40 md:block">
                   <span className="mr-2 text-2xl tabular-nums tracking-tight text-foreground">
-                    {family.programs.length}
+                    {family.count}
                   </span>
                   {family.countNoun}
                 </span>

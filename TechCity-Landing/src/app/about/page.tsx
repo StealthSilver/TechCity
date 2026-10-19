@@ -74,7 +74,7 @@ const principles = [
 const figures = [
   { value: "15+", label: "Years of leadership behind the company" },
   { value: "100%", label: "Programs built around live projects" },
-  { value: "200+", label: "Hiring and technology partners" },
+  { value: "50+", label: "Hiring and technology partners" },
   { value: "10K+", label: "Students and professionals mentored" },
 ];
 
@@ -216,9 +216,8 @@ export default function AboutPage() {
                   title="The company is led by the two people who set that standard."
                 />
                 <p className="mt-5 max-w-xl text-[15px] leading-7 text-foreground/65">
-                  Deepak Tripathi leads the technology. Gunjan Soam leads the
-                  academic work and the operations that put a program inside a
-                  college.
+                  Deepak Tripathi and Gunjan Soam are the directors and
+                  co-founders. They lead TechCity Skills together.
                 </p>
               </div>
               <CtaLink href="/faculty" className="self-start lg:self-auto">
@@ -237,25 +236,12 @@ export default function AboutPage() {
                     style={{ objectPosition: director.imagePosition }}
                   />
                   <div className="min-w-0">
-                    <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent">
-                      {director.kicker}
-                    </p>
-                    <p className="mt-2 text-[1.15rem] tracking-tight text-foreground">
+                    <p className="text-[1.15rem] tracking-tight text-foreground">
                       {director.name}
                     </p>
                     <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-foreground/40">
                       {director.role}
                     </p>
-                    <ul className="mt-3 flex flex-wrap gap-2">
-                      {director.focus.map((item) => (
-                        <li
-                          key={item}
-                          className="border border-foreground/15 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-foreground/60"
-                        >
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
                   </div>
                 </li>
               ))}

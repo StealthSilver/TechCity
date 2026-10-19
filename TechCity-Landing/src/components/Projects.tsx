@@ -76,9 +76,13 @@ export default function Projects() {
                           {project.subject}
                         </span>
                         <span className="mt-3 text-[1.05rem] tracking-tight text-foreground transition-colors group-hover:text-accent-secondary">
-                          {project.city}
+                          {project.campus}
                         </span>
-                        <span className="mt-1 text-[13px] text-foreground/50">{project.term}</span>
+                        <span className="mt-1 text-[13px] text-foreground/50">
+                          {project.city}
+                          <span className="text-foreground/30"> · </span>
+                          {project.term}
+                        </span>
                       </span>
                     </a>
                   </li>

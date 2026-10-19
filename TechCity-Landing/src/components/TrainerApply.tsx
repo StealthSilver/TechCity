@@ -1,103 +1,253 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
-import SiteSelect from "@/components/SiteSelect";
-import { openings, projectById } from "@/data/projects";
+import { useEffect, useId, useMemo, useRef, useState, type FormEvent } from "react";
+import SiteSelect, { SiteMultiSelect } from "@/components/SiteSelect";
+import { openings, projectById, projects } from "@/data/projects";
 
-const subjects = ["Software", "Data", "AI", "Cloud", "Security", "Faculty", "Online"];
+const TRAINER_INBOX = "techcityskillspvt.ltd@gmail.com";
 
-export default function TrainerApply({
-  openingId,
-  general = false,
-  timing,
-}: {
-  openingId?: string;
-  general?: boolean;
-  timing?: "current" | "upcoming";
-}) {
-  const pool = timing ? openings.filter((opening) => opening.timing === timing) : openings;
-  const selected = pool.find((opening) => opening.id === openingId) ?? pool[0];
-  const project = selected ? projectById(selected.projectId) : undefined;
-  const [subject, setSubject] = useState(selected?.subject ?? subjects[0]);
-  const [chosenOpening, setChosenOpening] = useState(selected?.id ?? "");
+const subjects = [
+  "Python Full Stack",
+  "SCADA",
+  "AI/ML",
+  "MERN",
+  "Java DSA",
+  "Python DSA",
+  "Data Analytics",
+  "Power BI",
+  "Excel",
+  "Aptitude",
+  "Cybersecurity",
+];
+
+const languages = [
+  "English",
+  "Hindi",
+  "Assamese",
+  "Bengali",
+  "Gujarati",
+  "Kannada",
+  "Kashmiri",
+  "Konkani",
+  "Malayalam",
+  "Marathi",
+  "Nepali",
+  "Odia",
+  "Punjabi",
+  "Sindhi",
+  "Tamil",
+  "Telugu",
+  "Urdu",
+];
+
+const indianCities = [
+  "Agartala",
+  "Agra",
+  "Ahmedabad",
+  "Aizawl",
+  "Ajmer",
+  "Allahabad",
+  "Amritsar",
+  "Ambala",
+  "Aurangabad",
+  "Banda",
+  "Bengaluru",
+  "Bhopal",
+  "Bhubaneswar",
+  "Bikaner",
+  "Chandigarh",
+  "Chennai",
+  "Coimbatore",
+  "Cuttack",
+  "Dehradun",
+  "Delhi",
+  "Dhanbad",
+  "Faridabad",
+  "Gangtok",
+  "Ghaziabad",
+  "Goa",
+  "Gorakhpur",
+  "Gurugram",
+  "Guwahati",
+  "Gwalior",
+  "Hyderabad",
+  "Imphal",
+  "Indore",
+  "Itanagar",
+  "Jabalpur",
+  "Jaipur",
+  "Jalandhar",
+  "Jammu",
+  "Jamshedpur",
+  "Jodhpur",
+  "Kanpur",
+  "Kochi",
+  "Kohima",
+  "Kolkata",
+  "Kota",
+  "Lucknow",
+  "Ludhiana",
+  "Madurai",
+  "Mangaluru",
+  "Meerut",
+  "Mumbai",
+  "Mysuru",
+  "Nagpur",
+  "Nashik",
+  "Noida",
+  "Patna",
+  "Puducherry",
+  "Pune",
+  "Raipur",
+  "Rajkot",
+  "Ranchi",
+  "Shillong",
+  "Shimla",
+  "Srinagar",
+  "Surat",
+  "Thane",
+  "Thiruvananthapuram",
+  "Udaipur",
+  "Vadodara",
+  "Varanasi",
+  "Vijayawada",
+  "Visakhapatnam",
+  "Warangal",
+];
+
+function projectFromProp(id?: string) {
+  if (!id) return undefined;
+  return projectById(id) ?? projectById(openings.find((item) => item.id === id)?.projectId ?? "");
+}
+
+export default function TrainerApply({ openingId }: { openingId?: string }) {
+  const listed = useMemo(
+    () =>
+      projects.filter(
+        (project) => project.status === "current" || project.status === "upcoming",
+      ),
+    [],
+  );
+  const preset = projectFromProp(openingId);
+  const presetListed = preset && listed.some((project) => project.id === preset.id);
+  const [chosenSubjects, setChosenSubjects] = useState<string[]>([]);
+  const [chosenLanguages, setChosenLanguages] = useState<string[]>([]);
+  const [city, setCity] = useState("");
+  const [wantsOpening, setWantsOpening] = useState(presetListed ? "yes" : "no");
+  const [chosenProject, setChosenProject] = useState(
+    presetListed ? preset.id : (listed[0]?.id ?? ""),
+  );
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!selected) return;
-    setSubject(selected.subject);
-    setChosenOpening(selected.id);
-  }, [selected]);
+    if (!presetListed || !preset) return;
+    setWantsOpening("yes");
+    setChosenProject(preset.id);
+  }, [preset, presetListed]);
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (chosenSubjects.length === 0 || chosenLanguages.length === 0) {
+      setError("Choose at least one subject and one language.");
+      return;
+    }
+    if (wantsOpening === "yes" && !chosenProject) {
+      setError("Choose an opening, or mark this as a general application.");
+      return;
+    }
+    setError("");
+
     const data = new FormData(event.currentTarget);
-    const opening = general
-      ? undefined
-      : pool.find((item) => item.id === String(data.get("opening")));
-    const linked = opening ? projectById(opening.projectId) : undefined;
     const name = String(data.get("name") ?? "");
     const email = String(data.get("email") ?? "");
     const phone = String(data.get("phone") ?? "");
-    const subject = String(data.get("subject") ?? "");
     const years = String(data.get("years") ?? "");
     const note = String(data.get("note") ?? "");
     const resume = data.get("resume");
-    const resumeName = resume instanceof File ? resume.name : "";
+    const resumeName = resume instanceof File && resume.name ? resume.name : "";
+    const project = wantsOpening === "yes" ? projectById(chosenProject) : undefined;
+    const openingLine = project
+      ? `${project.status === "current" ? "Ongoing" : "Upcoming"} — ${project.title}, ${project.campus}, ${project.city}`
+      : "General application";
 
     const body = [
       `Name: ${name}`,
       `Email: ${email}`,
       `Phone: ${phone}`,
-      `Subject: ${subject}`,
+      `Subjects: ${chosenSubjects.join(", ")}`,
+      `Languages: ${chosenLanguages.join(", ")}`,
+      `City: ${city}`,
       `Years teaching: ${years}`,
+      `Opening: ${openingLine}`,
       `Resume: ${resumeName}`,
-      ...(general
-        ? []
-        : [
-            `Opening: ${opening ? `${opening.subject} trainer, ${opening.campus}` : ""}`,
-            `Project: ${linked?.title ?? ""}`,
-            `City: ${opening?.city ?? ""}`,
-          ]),
       "",
       note,
     ].join("\n");
 
-    const mailto = `mailto:hello@techcityskills.com?subject=${encodeURIComponent(
-      general
-        ? `Trainer application — ${subject}`
-        : `Trainer application — ${opening?.city ?? "TechCity"} ${subject}`,
-    )}&body=${encodeURIComponent(body)}`;
+    const subjectLine = project
+      ? `Trainer application — ${project.city}`
+      : `Trainer application — ${city || "general"}`;
 
-    window.location.href = mailto;
+    // SMTP will replace this once credentials are available.
+    window.location.href = `mailto:${TRAINER_INBOX}?subject=${encodeURIComponent(subjectLine)}&body=${encodeURIComponent(body)}`;
   }
+
+  const project = wantsOpening === "yes" ? projectById(chosenProject) : undefined;
 
   return (
     <form onSubmit={onSubmit} className="mt-10 grid gap-5 sm:grid-cols-2">
       <Field label="Name" name="name" autoComplete="name" required />
       <Field label="Email" name="email" type="email" autoComplete="email" required />
       <Field label="Phone" name="phone" type="tel" autoComplete="tel" required />
-      <SiteSelect
-        variant="field"
-        name="subject"
-        label="Subject you teach"
+      <Field label="Years teaching" name="years" inputMode="numeric" required />
+      <SiteMultiSelect
+        name="subjects"
+        label="Subjects you teach"
         required
-        value={subject}
-        onChange={setSubject}
+        values={chosenSubjects}
+        onChange={setChosenSubjects}
         options={subjects.map((item) => ({ value: item, label: item }))}
       />
-      <Field label="Years teaching" name="years" inputMode="numeric" required />
-      {general ? null : (
+      <SiteMultiSelect
+        name="languages"
+        label="Languages"
+        required
+        values={chosenLanguages}
+        onChange={setChosenLanguages}
+        options={languages.map((item) => ({ value: item, label: item }))}
+      />
+      <div className="sm:col-span-2">
+        <CityField value={city} onChange={setCity} />
+      </div>
+      <SiteSelect
+        variant="field"
+        name="openingMode"
+        label="Opening"
+        required
+        value={wantsOpening}
+        onChange={setWantsOpening}
+        options={[
+          { value: "no", label: "General application" },
+          { value: "yes", label: "A specific ongoing or upcoming project" },
+        ]}
+      />
+      {wantsOpening === "yes" ? (
         <SiteSelect
           variant="field"
           name="opening"
-          label="Opening"
+          label="Project"
           required
-          value={chosenOpening}
-          onChange={setChosenOpening}
-          options={pool.map((opening) => ({
-            value: opening.id,
-            label: `${opening.city} — ${opening.subject}${opening.timing === "upcoming" ? " · upcoming" : ""}`,
+          value={chosenProject}
+          onChange={setChosenProject}
+          options={listed.map((item) => ({
+            value: item.id,
+            label: `${item.status === "current" ? "Ongoing" : "Upcoming"} · ${item.city} — ${item.title}`,
           }))}
         />
+      ) : (
+        <p className="self-end pb-2.5 text-sm leading-6 text-foreground/45">
+          Leave this as a general application, or choose a project we are running now or opening next.
+        </p>
       )}
       <label className="block sm:col-span-2">
         <Label required>Resume</Label>
@@ -117,15 +267,18 @@ export default function TrainerApply({
           name="note"
           rows={4}
           placeholder={
-            general
-              ? "The subject you teach, and where you can be on campus."
-              : project
-                ? `Why this ${project.title.toLowerCase()} seat at ${selected.campus}.`
-                : "Why this seat."
+            project
+              ? `Why this seat on ${project.title} at ${project.campus}.`
+              : "The subjects you teach, and where you can be on campus."
           }
           className="mt-2 w-full resize-y border border-foreground/15 bg-transparent px-3 py-2.5 text-sm leading-6 text-foreground outline-none placeholder:text-foreground/30 focus:border-accent"
         />
       </label>
+      {error ? (
+        <p className="text-sm text-accent sm:col-span-2" role="alert">
+          {error}
+        </p>
+      ) : null}
       <div className="sm:col-span-2">
         <button
           type="submit"
@@ -135,6 +288,82 @@ export default function TrainerApply({
         </button>
       </div>
     </form>
+  );
+}
+
+function CityField({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const listId = useId();
+  const query = value.trim().toLowerCase();
+  const matches = indianCities.filter((city) => city.toLowerCase().includes(query));
+
+  useEffect(() => {
+    if (!open) return;
+    function onPointer(event: MouseEvent) {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onPointer);
+    return () => document.removeEventListener("mousedown", onPointer);
+  }, [open]);
+
+  return (
+    <div ref={rootRef} className="relative">
+      <Label required>City</Label>
+      <input
+        name="city"
+        value={value}
+        required
+        autoComplete="address-level2"
+        role="combobox"
+        aria-expanded={open}
+        aria-controls={listId}
+        aria-autocomplete="list"
+        placeholder="Type a city, or choose one"
+        onChange={(event) => {
+          onChange(event.target.value);
+          setOpen(true);
+        }}
+        onFocus={() => setOpen(true)}
+        className="mt-2 w-full border border-foreground/15 bg-transparent px-3 py-2.5 text-sm text-foreground outline-none placeholder:text-foreground/30 focus:border-accent"
+      />
+      {open && matches.length > 0 ? (
+        <ul
+          id={listId}
+          role="listbox"
+          aria-label="Indian cities"
+          className="absolute top-full left-0 z-[900] mt-1 max-h-64 w-full overflow-auto border border-foreground/15 bg-background py-1"
+        >
+          {matches.map((city) => (
+            <li key={city} role="presentation">
+              <button
+                type="button"
+                role="option"
+                aria-selected={city === value}
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={() => {
+                  onChange(city);
+                  setOpen(false);
+                }}
+                className={`flex w-full items-center px-3 py-2 text-left text-sm ${
+                  city === value
+                    ? "bg-accent text-on-accent"
+                    : "text-foreground/75 hover:bg-foreground/[0.04] hover:text-foreground"
+                }`}
+              >
+                {city}
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
   );
 }
 

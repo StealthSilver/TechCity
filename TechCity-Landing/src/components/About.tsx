@@ -5,7 +5,7 @@ import SlotNumber from "@/components/SlotNumber";
 const figures = [
   { value: "15+", label: "Years of leadership" },
   { value: "100%", label: "Programs built on live projects" },
-  { value: "200+", label: "Hiring and tech partners" },
+  { value: "50+", label: "Hiring and tech partners" },
   { value: "10K+", label: "Students mentored" },
 ];
 

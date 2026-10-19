@@ -155,8 +155,8 @@ export default function Navbar({ theme = "dark" }: { theme?: "dark" | "light" })
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-colors duration-300 ${
-        light ? "nav-light border-b border-black/10" : ""
+      className={`sticky top-0 z-50 border-b border-foreground/15 transition-colors duration-300 [[data-theme=light]_&]:border-foreground/40 ${
+        light ? "nav-light" : ""
       } ${
         scrolled || open
           ? light

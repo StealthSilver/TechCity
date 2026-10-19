@@ -116,11 +116,10 @@ export default function ProjectsBoard({
     );
   });
   const selected = visible.find((project) => project.id === selectedId) ?? visible[0];
-  const opening = selected ? openingForProject(selected.id) : undefined;
-  const formOpening =
-    opening?.timing === "upcoming"
-      ? opening
-      : openings.find((item) => item.timing === "upcoming");
+  const formProjectId =
+    selected && (selected.status === "current" || selected.status === "upcoming")
+      ? selected.id
+      : undefined;
 
   useEffect(() => {
     if (!visible.some((project) => project.id === selectedId) && visible[0]) {
@@ -192,7 +191,7 @@ export default function ProjectsBoard({
           <h2 className="mt-4 text-[1.7rem] font-normal leading-[1.1] tracking-tight text-foreground sm:text-[2rem]">
             Join as a trainer.
           </h2>
-          <TrainerApply openingId={formOpening?.id} timing="upcoming" />
+          <TrainerApply openingId={formProjectId} />
         </div>
       ) : null}
     </div>
