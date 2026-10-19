@@ -290,28 +290,41 @@ function IndiaMap({
 
       const frameIndia = () => {
         map.invalidateSize();
+        map.setMaxBounds(L.latLngBounds([[0, 48], [42, 108]]));
+        map.setMinZoom(3);
+        map.setMaxZoom(6);
+
         if (!showList) {
-          map.setMaxBounds(L.latLngBounds([[0, 48], [42, 108]]));
-          map.setMinZoom(4);
-          map.setMaxZoom(6);
-          map.setView(bounds.getCenter(), 5, { animate: false });
+          map.fitBounds(bounds, {
+            padding: [24, 24],
+            maxZoom: 5,
+            animate: false,
+          });
           map.setMaxZoom(7);
-          map.setMinZoom(5);
+          map.setMinZoom(Math.min(5, map.getZoom()));
           return;
         }
+
         const wide = node.clientWidth >= 768;
-        const padLeft = wide ? 300 : 16;
-        const padRight = 40;
-        const padTop = wide ? 16 : 188;
-        const padBottom = wide ? 24 : 16;
-        map.setMaxBounds(L.latLngBounds([[0, 48], [42, 108]]));
-        map.setMinZoom(4);
-        map.setMaxZoom(6);
-        map.setView(bounds.getCenter(), 5, { animate: false });
-        map.panBy([-(padLeft - padRight) / 2, -(padTop - padBottom) / 2], {
-          animate: false,
-        });
-        map.setMinZoom(5);
+        if (wide) {
+          // Desktop: leave room for the floating project list on the left
+          map.fitBounds(bounds, {
+            paddingTopLeft: [300, 16],
+            paddingBottomRight: [40, 24],
+            maxZoom: 5,
+            animate: false,
+          });
+          map.setMinZoom(Math.min(5, map.getZoom()));
+        } else {
+          // Mobile: list is below — keep the whole country centered in the box
+          map.setView([22.2, 82.0], 4, { animate: false });
+          map.fitBounds(bounds, {
+            padding: [12, 28],
+            maxZoom: 4,
+            animate: false,
+          });
+          map.setMinZoom(3);
+        }
       };
       frameIndia();
       window.setTimeout(frameIndia, 80);

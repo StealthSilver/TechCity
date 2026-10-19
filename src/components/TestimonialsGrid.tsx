@@ -51,7 +51,7 @@ export default function TestimonialsGrid() {
 
   return (
     <div>
-      <div className="border-y border-foreground/10 py-5">
+      <div className="border-y border-foreground/10 py-3 sm:py-5">
         <div className="-mx-5 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:px-0">
           {programs.map((name) => (
             <Pill
@@ -67,7 +67,7 @@ export default function TestimonialsGrid() {
 
       <ul
         key={program}
-        className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        className="mt-5 grid gap-3 sm:mt-8 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3"
       >
         {items.map((item, index) => (
           <li

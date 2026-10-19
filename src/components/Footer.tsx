@@ -56,6 +56,38 @@ function FooterBar() {
   );
 }
 
+function FooterNav() {
+  return (
+    <nav aria-label="Footer">
+      <ul className="flex flex-col items-center gap-3 lg:gap-4">
+        {nav.map((link) => (
+          <li key={link.href}>
+            <a
+              href={link.href}
+              className="font-mono text-[12px] uppercase tracking-[0.18em] text-foreground/45 transition-colors hover:text-foreground"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
+function FooterMobile() {
+  return (
+    <div className="relative w-full pt-10">
+      <div className="pointer-events-auto flex flex-col items-center gap-10">
+        <FooterNav />
+        <div className="w-full">
+          <FooterBar />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function FooterHands() {
   const sceneRef = useRef<HTMLDivElement>(null);
   const leftRef = useRef<HTMLDivElement>(null);
@@ -114,11 +146,11 @@ function FooterHands() {
   return (
     <div
       ref={sceneRef}
-      className="relative mt-8 h-[min(90svh,56rem)] w-full overflow-hidden sm:mt-12 lg:mt-0 lg:h-[min(104svh,64rem)]"
+      className="relative mt-0 h-[min(104svh,64rem)] w-full overflow-hidden"
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-[30%] bottom-[22%] z-20 flex items-start justify-between sm:top-[26%] lg:top-[22%] lg:bottom-[26%]">
+      <div className="pointer-events-none absolute inset-x-0 top-[22%] bottom-[26%] z-20 flex items-start justify-between">
         <div
           ref={leftRef}
           className="relative h-full w-[46%] will-change-transform"
@@ -148,23 +180,9 @@ function FooterHands() {
       </div>
 
       <div className="pointer-events-none absolute inset-0 z-30">
-        <nav
-          aria-label="Footer"
-          className="pointer-events-auto absolute left-1/2 top-[min(36.5svh,22.4rem)] -translate-x-1/2 -translate-y-1/2 lg:top-[min(42.6svh,25.9rem)]"
-        >
-          <ul className="flex flex-col items-center gap-3 lg:gap-4">
-            {nav.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  className="font-mono text-[12px] uppercase tracking-[0.18em] text-foreground/45 transition-colors hover:text-foreground"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <div className="pointer-events-auto absolute left-1/2 top-[min(42.6svh,25.9rem)] -translate-x-1/2 -translate-y-1/2">
+          <FooterNav />
+        </div>
 
         <div className="absolute inset-x-0 bottom-0">
           <FooterBar />
@@ -177,7 +195,18 @@ function FooterHands() {
 export default function Footer({ compact = false }: { compact?: boolean }) {
   return (
     <footer id="contact" className="relative">
-      {compact ? <FooterBar /> : <FooterHands />}
+      {compact ? (
+        <FooterBar />
+      ) : (
+        <>
+          <div className="lg:hidden">
+            <FooterMobile />
+          </div>
+          <div className="hidden lg:block">
+            <FooterHands />
+          </div>
+        </>
+      )}
     </footer>
   );
 }

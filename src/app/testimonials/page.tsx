@@ -29,16 +29,16 @@ export default function TestimonialsPage() {
     <div className="flex min-h-full flex-col bg-background font-sans text-foreground">
       <Navbar />
       <main className="flex-1">
-        <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:py-[4.5rem]">
-          <div className="fade-up flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+        <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-20 lg:py-[4.5rem]">
+          <div className="fade-up flex flex-col gap-6 sm:gap-10 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <SectionHeading
                 index="05"
                 label="Testimonials"
                 title="In their words."
-                titleClassName="text-[2.35rem] sm:text-5xl"
+                titleClassName="text-[2rem] sm:text-5xl"
               />
-              <p className="mt-6 max-w-lg text-base leading-7 text-foreground/70">
+              <p className="mt-4 max-w-lg text-[15px] leading-6 text-foreground/70 sm:mt-6 sm:text-base sm:leading-7">
                 Students from campuses across India on the labs, mentors, and
                 hiring briefs that took them from classroom to first role.
               </p>
@@ -46,11 +46,14 @@ export default function TestimonialsPage() {
 
             <dl className="grid grid-cols-3 gap-px bg-foreground/10">
               {stats.map((stat) => (
-                <div key={stat.label} className="bg-background px-5 py-4 first:pl-0 sm:px-8">
-                  <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-foreground/40">
+                <div
+                  key={stat.label}
+                  className="bg-background px-2.5 py-3 first:pl-0 sm:px-8 sm:py-4"
+                >
+                  <dt className="font-mono text-[8px] uppercase leading-3 tracking-[0.12em] text-foreground/40 sm:text-[10px] sm:leading-normal sm:tracking-[0.16em]">
                     {stat.label}
                   </dt>
-                  <dd className="mt-2 text-3xl tracking-tight text-foreground">
+                  <dd className="mt-1.5 text-2xl tracking-tight text-foreground sm:mt-2 sm:text-3xl">
                     {stat.value}
                   </dd>
                 </div>
@@ -59,7 +62,7 @@ export default function TestimonialsPage() {
           </div>
 
           <div
-            className="fade-up mt-14"
+            className="fade-up mt-8 sm:mt-14"
             style={{ "--fade-delay": "120ms" } as React.CSSProperties}
           >
             <TestimonialsGrid />

@@ -261,7 +261,7 @@ export default function Navbar({ theme = "dark" }: { theme?: "dark" | "light" })
 
           <button
             type="button"
-            className="relative grid h-10 w-10 place-items-center rounded-full border border-foreground/10 text-foreground lg:hidden"
+            className="relative grid h-10 w-10 place-items-center rounded-full border border-foreground/45 bg-[color-mix(in_srgb,var(--foreground)_10%,var(--background))] text-foreground shadow-[0_8px_20px_rgba(0,0,0,0.35)] lg:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((value) => !value)}

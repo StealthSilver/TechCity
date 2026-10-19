@@ -43,6 +43,8 @@ type Grid = {
   vivid: boolean;
   detail: boolean;
   light: boolean;
+  /** Dark + detail + narrow viewport: brighter glyphs so the city reads on phones */
+  mobileBoost: boolean;
 };
 
 function isLightTheme() {
@@ -299,12 +301,16 @@ function lightColor(
   return hslToRgb(hsl.h, hover ? Math.min(0.76, sat + 0.06) : sat, lightness);
 }
 
+const MOBILE_DETAIL_SHADOW = 1.08;
+const MOBILE_DETAIL_HIGHLIGHT = 1.55;
+
 function cellFill(
   cell: Cell,
   hover: boolean,
   vivid = false,
   detail = false,
   light = false,
+  mobileBoost = false,
 ) {
   const { r, g, b, luma: t } = cell;
   if (light) return lightColor(r, g, b, t, hover, detail);
@@ -315,7 +321,10 @@ function cellFill(
     : detail
       ? hover
         ? 1.16 + t * 0.24
-        : DETAIL_SHADOW + t * (DETAIL_HIGHLIGHT - DETAIL_SHADOW)
+        : mobileBoost
+          ? MOBILE_DETAIL_SHADOW +
+            t * (MOBILE_DETAIL_HIGHLIGHT - MOBILE_DETAIL_SHADOW)
+          : DETAIL_SHADOW + t * (DETAIL_HIGHLIGHT - DETAIL_SHADOW)
       : hover
         ? 1.08 + t * 0.18
         : DARKEN_SHADOW + t * (DARKEN_HIGHLIGHT - DARKEN_SHADOW);
@@ -443,7 +452,14 @@ function paintBase(grid: Grid) {
       if (!cell || cell.knockout) continue;
       const char = cellChar(cell, grid.light, grid.detail);
       if (char === " ") continue;
-      ctx.fillStyle = cellFill(cell, false, grid.vivid, grid.detail, grid.light);
+      ctx.fillStyle = cellFill(
+        cell,
+        false,
+        grid.vivid,
+        grid.detail,
+        grid.light,
+        grid.mobileBoost,
+      );
       ctx.fillText(char, x * cssCellW, y * cssCellH);
     }
   }
@@ -550,7 +566,14 @@ export default function AsciiCity({
 
           if (dist > localRadius) continue;
 
-          ctx.fillStyle = cellFill(cell, true, grid.vivid, grid.detail, grid.light);
+          ctx.fillStyle = cellFill(
+            cell,
+            true,
+            grid.vivid,
+            grid.detail,
+            grid.light,
+            grid.mobileBoost,
+          );
           ctx.fillText(char, col * cssCellW, row * cssCellH);
         }
       }
@@ -591,16 +614,27 @@ export default function AsciiCity({
       sizeRef.current = { w: width, h: height, dpr };
 
       const light = isLightTheme();
+      const mobile = cssW < 1024;
+      const mobileBoost = Boolean(detail && !light && mobile);
       const cols = detail
         ? Math.round(
-            Math.min(light ? 300 : 240, Math.max(light ? 150 : 100, cssW / (light ? 2.9 : 3.8))),
+            Math.min(
+              light ? 300 : mobileBoost ? 160 : 240,
+              Math.max(
+                light ? 150 : mobileBoost ? 72 : 100,
+                cssW / (light ? 2.9 : mobileBoost ? 4.6 : 3.8),
+              ),
+            ),
           )
         : Math.round(
             Math.min(light ? 210 : 180, Math.max(light ? 96 : 80, cssW / (light ? 4.2 : 5.1))),
           );
       const cellW = width / cols;
       const fontSize = detail
-        ? Math.max(5, (cellW / dpr) * (light ? 1.2 : 1.02))
+        ? Math.max(
+            mobileBoost ? 7 : 5,
+            (cellW / dpr) * (light ? 1.2 : mobileBoost ? 1.18 : 1.02),
+          )
         : Math.max(7, (cellW / dpr) * (light ? 1.34 : 1.24));
       const cellH = fontSize * dpr * (detail ? 1.06 : 0.88);
       const rows = Math.max(28, Math.floor(height / cellH));
@@ -624,6 +658,7 @@ export default function AsciiCity({
         vivid: knockout,
         detail,
         light,
+        mobileBoost,
       };
       gridRef.current = grid;
       baseRef.current = paintBase(grid);

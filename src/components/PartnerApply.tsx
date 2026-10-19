@@ -73,6 +73,8 @@ function PartnerApplyDialog({
   const titleId = useId();
   const [kind, setKind] = useState<PartnerKind>("college");
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -83,6 +85,8 @@ function PartnerApplyDialog({
     if (!open) return;
     setKind("college");
     setSent(false);
+    setSending(false);
+    setError("");
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
@@ -98,8 +102,11 @@ function PartnerApplyDialog({
 
   if (!open || !mounted) return null;
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setError("");
+    setSending(true);
+
     const data = new FormData(event.currentTarget);
     const enquiry: PartnerEnquiry = {
       kind,
@@ -111,8 +118,28 @@ function PartnerApplyDialog({
       phone: String(data.get("phone") ?? ""),
       note: String(data.get("note") ?? ""),
     };
-    void enquiry;
-    setSent(true);
+
+    try {
+      const response = await fetch("/api/apply/partner", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(enquiry),
+      });
+      const payload = (await response.json().catch(() => null)) as {
+        error?: string;
+      } | null;
+
+      if (!response.ok) {
+        setError(payload?.error || "Could not send the application.");
+        return;
+      }
+
+      setSent(true);
+    } catch {
+      setError("Could not send the application. Check your connection.");
+    } finally {
+      setSending(false);
+    }
   }
 
   const organizationLabel = kind === "college" ? "College" : "Company";
@@ -149,7 +176,7 @@ function PartnerApplyDialog({
 
         {sent ? (
           <p className="px-5 py-10 text-[15px] leading-7 text-foreground sm:px-6">
-            We&apos;ll send the info soon.
+            Application sent. We&apos;ll reply on the email you shared.
           </p>
         ) : (
           <form
@@ -214,12 +241,18 @@ function PartnerApplyDialog({
                 className="mt-2 w-full resize-y border border-foreground/15 bg-transparent px-3 py-2.5 text-sm leading-6 text-foreground outline-none placeholder:text-foreground/30 focus:border-accent"
               />
             </label>
+            {error ? (
+              <p className="text-sm text-accent sm:col-span-2" role="alert">
+                {error}
+              </p>
+            ) : null}
             <div className="sm:col-span-2">
               <button
                 type="submit"
-                className="bg-accent px-5 py-2.5 text-[13px] font-medium text-on-accent transition-opacity hover:opacity-90"
+                disabled={sending}
+                className="bg-accent px-5 py-2.5 text-[13px] font-medium text-on-accent transition-opacity hover:opacity-90 disabled:opacity-60"
               >
-                Apply
+                {sending ? "Sending…" : "Apply"}
               </button>
             </div>
           </form>

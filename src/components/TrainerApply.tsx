@@ -4,8 +4,6 @@ import { useEffect, useId, useMemo, useRef, useState, type FormEvent } from "rea
 import SiteSelect, { SiteMultiSelect } from "@/components/SiteSelect";
 import { openings, projectById, projects } from "@/data/projects";
 
-const TRAINER_INBOX = "techcityskillspvt.ltd@gmail.com";
-
 const subjects = [
   "Python Full Stack",
   "SCADA",
@@ -138,6 +136,8 @@ export default function TrainerApply({ openingId }: { openingId?: string }) {
     presetListed ? preset.id : (listed[0]?.id ?? ""),
   );
   const [error, setError] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   useEffect(() => {
     if (!presetListed || !preset) return;
@@ -145,7 +145,7 @@ export default function TrainerApply({ openingId }: { openingId?: string }) {
     setChosenProject(preset.id);
   }, [preset, presetListed]);
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (chosenSubjects.length === 0 || chosenLanguages.length === 0) {
       setError("Choose at least one subject and one language.");
@@ -156,43 +156,57 @@ export default function TrainerApply({ openingId }: { openingId?: string }) {
       return;
     }
     setError("");
+    setSending(true);
 
-    const data = new FormData(event.currentTarget);
-    const name = String(data.get("name") ?? "");
-    const email = String(data.get("email") ?? "");
-    const phone = String(data.get("phone") ?? "");
-    const years = String(data.get("years") ?? "");
-    const note = String(data.get("note") ?? "");
-    const resume = data.get("resume");
-    const resumeName = resume instanceof File && resume.name ? resume.name : "";
+    const form = event.currentTarget;
+    const data = new FormData(form);
     const project = wantsOpening === "yes" ? projectById(chosenProject) : undefined;
     const openingLine = project
       ? `${project.status === "current" ? "Ongoing" : "Upcoming"} — ${project.title}, ${project.campus}, ${project.city}`
       : "General application";
 
-    const body = [
-      `Name: ${name}`,
-      `Email: ${email}`,
-      `Phone: ${phone}`,
-      `Subjects: ${chosenSubjects.join(", ")}`,
-      `Languages: ${chosenLanguages.join(", ")}`,
-      `City: ${city}`,
-      `Years teaching: ${years}`,
-      `Opening: ${openingLine}`,
-      `Resume: ${resumeName}`,
-      "",
-      note,
-    ].join("\n");
+    data.set("subjects", chosenSubjects.join(", "));
+    data.set("languages", chosenLanguages.join(", "));
+    data.set("city", city);
+    data.set("opening", openingLine);
 
-    const subjectLine = project
-      ? `Trainer application — ${project.city}`
-      : `Trainer application — ${city || "general"}`;
+    try {
+      const response = await fetch("/api/apply/trainer", {
+        method: "POST",
+        body: data,
+      });
+      const payload = (await response.json().catch(() => null)) as {
+        error?: string;
+      } | null;
 
-    // SMTP will replace this once credentials are available.
-    window.location.href = `mailto:${TRAINER_INBOX}?subject=${encodeURIComponent(subjectLine)}&body=${encodeURIComponent(body)}`;
+      if (!response.ok) {
+        setError(payload?.error || "Could not send the application.");
+        return;
+      }
+
+      setSent(true);
+      form.reset();
+      setChosenSubjects([]);
+      setChosenLanguages([]);
+      setCity("");
+      setWantsOpening(presetListed ? "yes" : "no");
+      setChosenProject(presetListed && preset ? preset.id : (listed[0]?.id ?? ""));
+    } catch {
+      setError("Could not send the application. Check your connection.");
+    } finally {
+      setSending(false);
+    }
   }
 
   const project = wantsOpening === "yes" ? projectById(chosenProject) : undefined;
+
+  if (sent) {
+    return (
+      <p className="mt-10 text-[15px] leading-7 text-foreground">
+        Application sent. We&apos;ll reply on the email you shared.
+      </p>
+    );
+  }
 
   return (
     <form onSubmit={onSubmit} className="mt-10 grid gap-5 sm:grid-cols-2">
@@ -282,9 +296,10 @@ export default function TrainerApply({ openingId }: { openingId?: string }) {
       <div className="sm:col-span-2">
         <button
           type="submit"
-          className="bg-accent px-5 py-2.5 text-[13px] font-medium text-on-accent transition-opacity hover:opacity-90"
+          disabled={sending}
+          className="bg-accent px-5 py-2.5 text-[13px] font-medium text-on-accent transition-opacity hover:opacity-90 disabled:opacity-60"
         >
-          Apply
+          {sending ? "Sending…" : "Apply"}
         </button>
       </div>
     </form>
