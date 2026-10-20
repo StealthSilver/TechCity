@@ -8,7 +8,7 @@ import { faculty } from "@/data/faculty";
 export const metadata: Metadata = {
   title: "Faculty profiles",
   description:
-    "Sample faculty profiles for TechCity Skills: software, artificial intelligence, data, cloud, and security.",
+    "TechCity Skills trainers: software, artificial intelligence, data science, and campus mentoring.",
 };
 
 export default function FacultyProfilesPage() {

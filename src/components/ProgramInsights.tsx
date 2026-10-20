@@ -364,7 +364,7 @@ export function FacultySubjects() {
       <h3 className="border-b border-foreground/10 px-4 py-5 text-[1.45rem] font-normal leading-tight tracking-tight text-foreground sm:px-5 sm:text-[1.7rem] sm:leading-none">
         Subjects
         <sup className="ml-2 font-mono text-[11px] font-normal tracking-[0.14em] text-foreground/45">
-          {`${total.toLocaleString("en-US")} faculty`}
+          {`${total.toLocaleString("en-US")} featured`}
         </sup>
       </h3>
       <ul>

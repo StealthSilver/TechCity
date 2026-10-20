@@ -127,7 +127,12 @@ export default function FacultyPage() {
                     className="group flex h-full flex-col px-5 py-6 transition-colors hover:bg-foreground/[0.03] sm:px-6 sm:py-7"
                   >
                     <div className="flex items-start gap-4">
-                      <FacultyAvatar name={person.name} className="size-16" />
+                      <FacultyAvatar
+                        name={person.name}
+                        image={person.image}
+                        imagePosition={person.imagePosition}
+                        className="size-16"
+                      />
                       <div className="min-w-0">
                         <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
                           {String(index + 1).padStart(2, "0")}
@@ -163,9 +168,9 @@ export default function FacultyPage() {
               title="Where the faculty teach."
             />
             <p className="mt-5 max-w-xl text-[15px] leading-7 text-foreground/65">
-              Of the 40+ faculty in the programs now, the largest groups teach
-              software and artificial intelligence. Data, cloud, and security
-              make up the rest.
+              Featured trainers teach across software, artificial intelligence,
+              and data. Cloud, DevOps, and cybersecurity sit beside those
+              tracks where the campus needs them.
             </p>
             <div className="mt-12">
               <FacultySubjects />

@@ -20,6 +20,8 @@ export default function FacultyProfile({
       <div className="flex items-start gap-5">
         <FacultyAvatar
           name={person.name}
+          image={person.image}
+          imagePosition={person.imagePosition}
           className="size-24 sm:size-28"
         />
         <div className="min-w-0">
@@ -51,6 +53,16 @@ export default function FacultyProfile({
               </li>
             ))}
           </ul>
+          {person.linkedin ? (
+            <a
+              href={person.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex font-mono text-[10px] uppercase tracking-[0.16em] text-accent transition-colors hover:text-foreground"
+            >
+              LinkedIn
+            </a>
+          ) : null}
         </div>
       </div>
       {detailed ? (

@@ -15,11 +15,31 @@ function initials(name: string) {
 
 export default function FacultyAvatar({
   name,
+  image,
+  imagePosition = "50% 20%",
   className = "size-16",
 }: {
   name: string;
+  image?: string;
+  imagePosition?: string;
   className?: string;
 }) {
+  if (image) {
+    return (
+      <span
+        className={`relative shrink-0 overflow-hidden border border-foreground/10 bg-foreground/5 ${className}`}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={image}
+          alt=""
+          className="size-full object-cover"
+          style={{ objectPosition: imagePosition }}
+        />
+      </span>
+    );
+  }
+
   const hash = hashName(name);
   const lightField = hash % 2 === 0;
   const blocks = Array.from({ length: 6 }, (_, index) => ((hash >> (index * 3)) & 7) > 3);

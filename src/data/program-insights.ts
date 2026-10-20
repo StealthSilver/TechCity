@@ -195,13 +195,11 @@ export const termPanel: InsightPanelData = {
   ],
 };
 
-/** College faculty now, split across the five trainer subjects. */
+/** Featured trainers, counted by primary teaching domain. */
 export const facultySubjects = [
-  { subject: "Software engineering", count: 11 },
-  { subject: "Artificial intelligence", count: 10 },
-  { subject: "Data and analytics", count: 7 },
-  { subject: "Cloud and DevOps", count: 7 },
-  { subject: "Cybersecurity", count: 5 },
+  { subject: "Software engineering", count: 3 },
+  { subject: "Artificial intelligence", count: 2 },
+  { subject: "Data and analytics", count: 2 },
 ] as const;
 
 export const facultyPanel: InsightPanelData = {
