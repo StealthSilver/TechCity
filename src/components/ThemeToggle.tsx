@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const STORAGE_KEY = "techcity-theme";
 
@@ -18,39 +18,49 @@ export function applyTheme(theme: "light" | "dark") {
   window.dispatchEvent(new Event("techcity-theme"));
 }
 
-export default function ThemeToggle() {
-  const toggle = useCallback(() => {
-    const next =
-      document.documentElement.dataset.theme === "light" ? "dark" : "light";
-    applyTheme(next);
+function readTheme(): "light" | "dark" {
+  if (typeof document === "undefined") return "dark";
+  return document.documentElement.dataset.theme === "light" ? "light" : "dark";
+}
+
+export default function ThemeToggle({ className = "" }: { className?: string }) {
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
+
+  useEffect(() => {
+    const sync = () => setTheme(readTheme());
+    sync();
+    window.addEventListener("techcity-theme", sync);
+    return () => window.removeEventListener("techcity-theme", sync);
   }, []);
 
+  const setLight = useCallback(() => applyTheme("light"), []);
+  const setDark = useCallback(() => applyTheme("dark"), []);
+
   return (
-    <button
-      type="button"
-      onClick={toggle}
-      aria-label="Toggle color theme"
-      className="theme-toggle pointer-events-auto"
+    <div
+      className={`theme-toggle pointer-events-auto ${className}`.trim()}
+      role="group"
+      aria-label="Color theme"
     >
-      <svg className="theme-toggle-to-light" viewBox="0 0 16 16" aria-hidden="true">
-        <circle cx="8" cy="8" r="2.25" fill="none" stroke="currentColor" strokeWidth="1.25" />
-        <path
-          d="M8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M12.6 3.4l-1.1 1.1M4.5 11.5l-1.1 1.1"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.25"
-          strokeLinecap="square"
-        />
-      </svg>
-      <svg className="theme-toggle-to-dark" viewBox="0 0 16 16" aria-hidden="true">
-        <path
-          d="M10.2 2.2a5.2 5.2 0 1 0 3.6 8.8 4.4 4.4 0 0 1-3.6-8.8Z"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.25"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </button>
+      <button
+        type="button"
+        onClick={setLight}
+        aria-pressed={theme === "light"}
+        className={theme === "light" ? "is-active" : undefined}
+      >
+        light
+      </button>
+      <span aria-hidden="true" className="theme-toggle-sep">
+        /
+      </span>
+      <button
+        type="button"
+        onClick={setDark}
+        aria-pressed={theme === "dark"}
+        className={theme === "dark" ? "is-active" : undefined}
+      >
+        dark
+      </button>
+    </div>
   );
 }

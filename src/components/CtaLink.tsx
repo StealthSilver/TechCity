@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 function PlusIcon() {
   return (
     <svg
@@ -40,12 +42,14 @@ export default function CtaLink({
   onClick,
   className = "",
   size = "sm",
+  external = false,
 }: {
   href?: string;
   children: React.ReactNode;
   onClick?: () => void;
   className?: string;
   size?: keyof typeof sizes;
+  external?: boolean;
 }) {
   const { box, label } = sizes[size];
   const classes = `group inline-flex min-w-0 shrink-0 cursor-pointer items-center justify-center whitespace-nowrap font-medium outline-none ${className}`;
@@ -58,10 +62,24 @@ export default function CtaLink({
     );
   }
 
+  if (external) {
+    return (
+      <a
+        href={href}
+        onClick={onClick}
+        className={classes}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {ctaInner(box, label, children)}
+      </a>
+    );
+  }
+
   return (
-    <a href={href} onClick={onClick} className={classes}>
+    <Link href={href} onClick={onClick} className={classes}>
       {ctaInner(box, label, children)}
-    </a>
+    </Link>
   );
 }
 

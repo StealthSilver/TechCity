@@ -1,13 +1,21 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { studentPage, studentProducts, studentLogin } from "@/data/student";
+import {
+  comingSoonProducts,
+  studentLogin,
+  studentPage,
+} from "@/data/student";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
 export function generateStaticParams() {
-  return [...studentProducts, studentLogin].map((page) => ({ slug: page.slug }));
+  return [
+    { slug: studentLogin.slug },
+    ...comingSoonProducts.map((product) => ({ slug: product.slug })),
+  ];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -37,12 +45,12 @@ export default async function StudentProductPage({ params }: Props) {
       <p className="mt-5 max-w-md text-[15px] leading-7 text-foreground/65">
         {page.line}
       </p>
-      <a
+      <Link
         href="/students"
         className="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-foreground/55 transition-colors hover:text-foreground"
       >
         Back to students
-      </a>
+      </Link>
     </main>
   );
 }

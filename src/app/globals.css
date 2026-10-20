@@ -43,21 +43,45 @@ html {
   color-scheme: light;
 }
 
-html:has(.student-page) {
-  --background: #ffffff;
-  --foreground: #1a1916;
-  --accent: #3b63c4;
-  --accent-secondary: #b45309;
+html[data-theme="light"]:has(.student-page) {
+  --accent: #2563eb;
+  --accent-secondary: #0d9488;
   --on-accent: #f7f9ff;
-  --on-accent-secondary: #fffaf3;
-  color-scheme: light;
-  background: var(--background);
+  --on-accent-secondary: #ecfdf8;
 }
 
-html:has(.student-page) body {
-  background: var(--background);
-  color: var(--foreground);
-  color-scheme: light;
+.student-hero-scrim {
+  background:
+    radial-gradient(
+      52% 46% at 50% 46%,
+      color-mix(in srgb, var(--background) 58%, transparent) 0%,
+      color-mix(in srgb, var(--background) 28%, transparent) 45%,
+      transparent 78%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--background) 40%, transparent) 0%,
+      transparent 24%,
+      transparent 76%,
+      color-mix(in srgb, var(--background) 55%, transparent) 100%
+    );
+}
+
+html[data-theme="light"] .student-hero-scrim {
+  background:
+    radial-gradient(
+      48% 42% at 50% 46%,
+      color-mix(in srgb, var(--background) 48%, transparent) 0%,
+      color-mix(in srgb, var(--background) 18%, transparent) 48%,
+      transparent 80%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--background) 28%, transparent) 0%,
+      transparent 26%,
+      transparent 74%,
+      color-mix(in srgb, var(--background) 40%, transparent) 100%
+    );
 }
 
 body {
@@ -132,32 +156,35 @@ html[data-theme="light"] .hero-lead {
 .theme-toggle {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 1rem;
-  height: 1rem;
+  gap: 0.35rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.theme-toggle button {
   padding: 0;
   border: 0;
   background: none;
-  color: color-mix(in srgb, var(--foreground) 45%, transparent);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: color-mix(in srgb, var(--foreground) 40%, transparent);
+  cursor: pointer;
+  transition: color 200ms ease;
 }
 
-.theme-toggle:hover {
+.theme-toggle button:hover {
+  color: color-mix(in srgb, var(--foreground) 70%, transparent);
+}
+
+.theme-toggle button.is-active {
   color: var(--foreground);
 }
 
-.theme-toggle svg {
-  width: 1rem;
-  height: 1rem;
-}
-
-.theme-toggle-to-light,
-.theme-toggle-to-dark {
-  display: none;
-}
-
-html:not([data-theme="light"]) .theme-toggle-to-light,
-html[data-theme="light"] .theme-toggle-to-dark {
-  display: block;
+.theme-toggle-sep {
+  color: color-mix(in srgb, var(--foreground) 25%, transparent);
 }
 
 @keyframes marquee-up {
