@@ -72,10 +72,10 @@ const principles = [
 ];
 
 const figures = [
-  { value: "15+", label: "Years of leadership behind the company" },
-  { value: "100%", label: "Programs built around live projects" },
-  { value: "50+", label: "Hiring and technology partners" },
-  { value: "10K+", label: "Students and professionals mentored" },
+  { value: "30+", label: "Partner colleges" },
+  { value: "50+", label: "Industry partners" },
+  { value: "40+", label: "Faculty and trainers" },
+  { value: "10K+", label: "Students mentored" },
 ];
 
 export default function AboutPage() {

@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Careers",
   description:
-    "Apply to roles and opportunities through TechCity — internships, campus programs, and openings for students.",
+    "Apply to roles and opportunities through TechCity: internships, campus programs, and openings for students.",
 };
 
 export default function StudentCareersPage() {
@@ -17,7 +17,7 @@ export default function StudentCareersPage() {
         Coming soon
       </h1>
       <p className="mt-5 max-w-md text-[15px] leading-7 text-foreground/65">
-        This is where students will apply — internships, campus programs, and
+        This is where students will apply: internships, campus programs, and
         openings shared through TechCity partners. Browse roles and submit your
         interest in one place.
       </p>

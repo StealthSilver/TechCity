@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Showcase",
   description:
-    "Student projects from TechCity campuses — work you can open, run, and ask about.",
+    "Student projects from TechCity campuses: work you can open, run, and ask about.",
 };
 
 export default function StudentProjectsPage() {
@@ -17,7 +17,7 @@ export default function StudentProjectsPage() {
         Coming soon
       </h1>
       <p className="mt-5 max-w-md text-[15px] leading-7 text-foreground/65">
-        This page will collect student projects from TechCity programs —
+        This page will collect student projects from TechCity programs:
         upcoming, ongoing, and shipped work from real campuses that a hiring
         team can open and ask about.
       </p>

@@ -3,9 +3,9 @@ import SectionHeading from "@/components/SectionHeading";
 import SlotNumber from "@/components/SlotNumber";
 
 const figures = [
-  { value: "15+", label: "Years of leadership" },
-  { value: "100%", label: "Programs built on live projects" },
-  { value: "50+", label: "Hiring and tech partners" },
+  { value: "30+", label: "Partner colleges" },
+  { value: "50+", label: "Industry partners" },
+  { value: "40+", label: "Faculty & trainers" },
   { value: "10K+", label: "Students mentored" },
 ];
 
@@ -25,6 +25,12 @@ export default function About() {
               TechCity Skills works inside colleges, with their faculty, so a
               student leaves able to join a team.
             </p>
+            <p className="mt-3 max-w-xl text-[15px] leading-7 text-foreground/65">
+              Programs are lab-first: live projects, timed practice, and
+              reviews the way a team works. Content is built with industry
+              partners and kept current, so campus hours map to the first week
+              on the job.
+            </p>
           </div>
           <div className="flex flex-wrap gap-3">
             <CtaLink href="/about">Read the story</CtaLink>
@@ -34,11 +40,11 @@ export default function About() {
 
         <ul className="mt-12 grid grid-cols-2 gap-px bg-foreground/10 md:grid-cols-4">
           {figures.map((item, index) => (
-            <li key={item.label} className="bg-background px-4 py-5 sm:px-5">
+            <li key={item.label} className="bg-background px-4 py-6 sm:px-5 sm:py-7">
               <p className="text-3xl leading-none tracking-tight text-foreground sm:text-4xl">
-                <SlotNumber value={item.value} delay={index * 80} />
+                <SlotNumber value={item.value} delay={index * 90} />
               </p>
-              <p className="mt-2 max-w-[11rem] font-mono text-[10px] uppercase leading-4 tracking-[0.14em] text-foreground/40">
+              <p className="mt-2.5 max-w-[11rem] font-mono text-[10px] uppercase leading-4 tracking-[0.14em] text-foreground/40">
                 {item.label}
               </p>
             </li>

@@ -5,10 +5,10 @@ import CtaLink from "@/components/CtaLink";
 import GradientASCII from "@/components/GradientASCII";
 import { studentLogin } from "@/data/student";
 
-/** Dark theme — leave unchanged. */
+/** Dark theme: leave unchanged. */
 const DARK_COLORS = ["#0a1f6e", "#1e4fd8", "#3b6ff0", "#6b9aff"];
 
-/** Light theme — deeper blues so the ASCII reads on white. */
+/** Light theme: deeper blues so the ASCII reads on white. */
 const LIGHT_COLORS = ["#0b2a8a", "#1d4ed8", "#2563eb", "#3b82f6"];
 
 function readIsLight() {

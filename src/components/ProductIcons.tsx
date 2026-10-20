@@ -16,7 +16,7 @@ function IconShell({
       viewBox="0 0 24 24"
       fill="none"
       aria-hidden="true"
-      className={`size-5 ${className}`}
+      className={className || "size-5"}
       stroke="currentColor"
       strokeWidth="1.75"
       strokeLinecap="round"

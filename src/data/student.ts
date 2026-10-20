@@ -19,7 +19,7 @@ export const studentProducts: StudentProduct[] = [
     label: "Marg",
     index: "01",
     title: "Learning paths and roadmaps",
-    line: "Ordered tracks so you always know the next step — DSA, AI/ML, cloud, and more.",
+    line: "Ordered tracks so you always know the next step: DSA, AI/ML, cloud, and more.",
     href:
       process.env.NEXT_PUBLIC_PRODUCT_MARG_URL?.trim() ||
       "https://tech-city-rm.vercel.app/",
