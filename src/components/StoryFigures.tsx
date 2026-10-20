@@ -5,7 +5,7 @@ export function GapFigure({ className = "" }: { className?: string }) {
   const team = ["Design", "Review", "Ship"];
 
   return (
-    <FigureFrame caption="Campus and the team" index="01" className={className}>
+    <FigureFrame caption="Campus and the team" index="01" className={`max-w-md ${className}`}>
       <rect
         x="96"
         y="72"
@@ -68,7 +68,7 @@ export function GapFigure({ className = "" }: { className?: string }) {
 
 export function KeptLabFigure({ className = "" }: { className?: string }) {
   return (
-    <FigureFrame caption="Work a team can open" index="01" className={className}>
+    <FigureFrame caption="Work a team can open" index="01" className={`max-w-md ${className}`}>
       <rect
         x="72"
         y="64"
@@ -124,7 +124,7 @@ export function KeptLabFigure({ className = "" }: { className?: string }) {
 
 export function LateStackFigure({ className = "" }: { className?: string }) {
   return (
-    <FigureFrame caption="What arrives late" index="02" className={className}>
+    <FigureFrame caption="What arrives late" index="02" className={`max-w-md ${className}`}>
       <rect
         x="72"
         y="56"
@@ -185,7 +185,7 @@ export function FirstWeekFigure({ className = "" }: { className?: string }) {
   ];
 
   return (
-    <FigureFrame caption="The first week" index="03" className={className}>
+    <FigureFrame caption="The first week" index="03" className={`max-w-md ${className}`}>
       <rect
         x="72"
         y="56"

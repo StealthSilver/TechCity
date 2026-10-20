@@ -128,20 +128,20 @@ export default function StudentNav() {
         scrolled || open ? "bg-background/85 backdrop-blur-xl" : "bg-background"
       }`}
     >
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-5 sm:h-[4.25rem] sm:px-8">
+      <nav className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:h-16 sm:gap-6 sm:px-5 md:h-[4.25rem] md:px-8">
         <Link href="/students" className="shrink-0" aria-label="TechCity">
           <Image
             src="/logo.png"
             alt="TechCity"
             width={945}
             height={921}
-            className="brand-mark h-11 w-11 object-contain sm:h-12 sm:w-12"
+            className="brand-mark h-10 w-10 object-contain sm:h-11 sm:w-11 md:h-12 md:w-12"
             priority
             unoptimized
           />
         </Link>
 
-        <div className="flex min-w-0 items-center justify-end gap-6 lg:gap-8">
+        <div className="flex min-w-0 items-center justify-end gap-3 sm:gap-6 lg:gap-8">
           <ul className="hidden items-center gap-7 lg:flex">
             <li
               className="relative"
@@ -287,13 +287,13 @@ export default function StudentNav() {
       <div
         className={`absolute inset-x-0 top-full z-50 border-t border-foreground/10 bg-background/95 shadow-[0_24px_48px_rgba(0,0,0,0.12)] backdrop-blur-xl transition-[max-height,opacity] duration-300 lg:hidden ${
           open
-            ? "max-h-[calc(100svh-4.25rem)] overflow-y-auto opacity-100"
+            ? "max-h-[calc(100svh-3.5rem)] overflow-y-auto overscroll-contain opacity-100 sm:max-h-[calc(100svh-4rem)] md:max-h-[calc(100svh-4.25rem)]"
             : "pointer-events-none max-h-0 overflow-hidden opacity-0"
         }`}
         aria-hidden={!open}
         inert={!open ? true : undefined}
       >
-        <ul className="flex flex-col gap-1 px-5 py-4">
+        <ul className="flex flex-col gap-1 px-4 py-3 sm:px-5 sm:py-4">
           <li>
             <button
               type="button"

@@ -49,7 +49,7 @@ export function FigureFrame({
 }) {
   return (
     <figure
-      className={`relative w-full max-w-md overflow-hidden border border-foreground/10 ${className}`}
+      className={`relative w-full overflow-hidden border border-foreground/10 ${className}`}
     >
       <div
         aria-hidden="true"
@@ -67,8 +67,8 @@ export function FigureFrame({
       >
         {children}
       </svg>
-      <figcaption className="relative flex items-center justify-between gap-4 border-t border-foreground/10 bg-background px-4 py-3 font-mono text-[10px] uppercase tracking-[0.16em] text-foreground/45">
-        <span>{caption}</span>
+      <figcaption className="relative flex items-center justify-between gap-3 border-t border-foreground/10 bg-background px-3 py-2.5 font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/45 sm:gap-4 sm:px-4 sm:py-3 sm:text-[10px]">
+        <span className="min-w-0 truncate">{caption}</span>
         <span className="shrink-0 text-accent-secondary">{index}</span>
       </figcaption>
     </figure>

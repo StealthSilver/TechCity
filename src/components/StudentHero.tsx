@@ -18,6 +18,7 @@ function readIsLight() {
 
 export default function StudentHero() {
   const [light, setLight] = useState(false);
+  const [compact, setCompact] = useState(false);
 
   useEffect(() => {
     const sync = () => setLight(readIsLight());
@@ -26,20 +27,28 @@ export default function StudentHero() {
     return () => window.removeEventListener("techcity-theme", sync);
   }, []);
 
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 639px)");
+    const sync = () => setCompact(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+
   return (
-    <section className="student-hero relative isolate min-h-[min(92svh,52rem)] overflow-hidden">
+    <section className="student-hero relative isolate min-h-[min(78svh,34rem)] overflow-hidden sm:min-h-[min(85svh,44rem)] lg:min-h-[min(92svh,52rem)]">
       <div aria-hidden="true" className="absolute inset-0 z-0">
         <GradientASCII
-          key={light ? "light" : "dark"}
+          key={`${light ? "light" : "dark"}-${compact ? "sm" : "lg"}`}
           colors={light ? LIGHT_COLORS : DARK_COLORS}
           shape="horizon"
           characters=" =+xX0S8#@"
-          cellSize={18}
-          density={0.8}
+          cellSize={compact ? 14 : 18}
+          density={compact ? 0.7 : 0.8}
           glyphOpacity={light ? 0.95 : 0.85}
           glow={light ? 0.12 : 0.2}
           depthOfField={0}
-          flicker={0.2}
+          flicker={compact ? 0.12 : 0.2}
           softness={0.5}
           scale={1}
           flow={0.5}
@@ -47,7 +56,7 @@ export default function StudentHero() {
           gradientOpacity={light ? 1 : 0.9}
           grain={light ? 0.04 : 0.08}
           variation={0}
-          mouseInteraction
+          mouseInteraction={!compact}
           scrambleRadius={0.1}
           clickEffect="wave"
           intro
@@ -60,20 +69,20 @@ export default function StudentHero() {
         className="student-hero-scrim pointer-events-none absolute inset-0 z-[1]"
       />
 
-      <div className="pointer-events-none relative z-10 mx-auto flex min-h-[min(92svh,52rem)] max-w-7xl flex-col items-center justify-center px-5 py-20 text-center sm:px-8 sm:py-24">
-        <div className="fade-up flex max-w-2xl flex-col items-center">
-          <h1 className="text-[2.75rem] font-normal leading-[1.02] tracking-tight text-foreground sm:text-5xl lg:text-[4.75rem]">
+      <div className="pointer-events-none relative z-10 mx-auto flex min-h-[min(78svh,34rem)] max-w-7xl flex-col items-center justify-center px-5 py-16 text-center sm:min-h-[min(85svh,44rem)] sm:px-8 sm:py-20 lg:min-h-[min(92svh,52rem)] lg:py-24">
+        <div className="fade-up flex w-full max-w-2xl flex-col items-center">
+          <h1 className="text-balance text-[2.35rem] font-normal leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-[4.75rem] lg:leading-[1.02]">
             Learn. Practice. Ship.
           </h1>
-          <p className="mt-5 max-w-sm text-[14px] leading-6 text-foreground/65 sm:text-[15px] sm:leading-7">
+          <p className="mt-4 max-w-sm text-[14px] leading-6 text-foreground/65 sm:mt-5 sm:text-[15px] sm:leading-7">
             Practice, assessments, and courses that help campus students get
             placed.
           </p>
-          <div className="pointer-events-auto mt-10">
+          <div className="pointer-events-auto mt-8 sm:mt-10">
             <CtaLink
               href={studentLogin.href}
               external={studentLogin.external}
-              size="lg"
+              size={compact ? "md" : "lg"}
             >
               {studentLogin.label}
             </CtaLink>

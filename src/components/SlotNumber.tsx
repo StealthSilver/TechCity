@@ -85,14 +85,20 @@ export default function SlotNumber({
     return () => observer.disconnect();
   }, []);
 
-  let digitIndex = 0;
+  const characters = value.split("");
+  const digitOffsets = characters.reduce<number[]>((offsets, character) => {
+    if (/\d/.test(character)) offsets.push(offsets.length);
+    else offsets.push(-1);
+    return offsets;
+  }, []);
 
   return (
     <span ref={root} className="inline-flex items-end tabular-nums">
       <span className="sr-only">{value}</span>
       <span aria-hidden="true" className="inline-flex items-end">
-        {value.split("").map((character, index) => {
-          if (!/\d/.test(character)) {
+        {characters.map((character, index) => {
+          const digitOffset = digitOffsets[index] ?? -1;
+          if (digitOffset < 0) {
             return (
               <span key={index} className="leading-none">
                 {character}
@@ -100,13 +106,11 @@ export default function SlotNumber({
             );
           }
 
-          const reelDelay = delay + digitIndex * 140;
-          digitIndex += 1;
           return (
             <DigitReel
               key={index}
               digit={Number(character)}
-              delay={reelDelay}
+              delay={delay + digitOffset * 140}
               play={play}
             />
           );

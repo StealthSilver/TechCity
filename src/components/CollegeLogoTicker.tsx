@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import LogoLoop from "@/components/LogoLoop";
 import { collegePartnerMarks } from "@/data/partners";
 
@@ -16,21 +17,31 @@ const collegeLogos = collegePartnerMarks
   }));
 
 export default function CollegeLogoTicker() {
+  const [compact, setCompact] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 639px)");
+    const sync = () => setCompact(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+
   return (
     <div
-      className="student-logo-ticker relative h-20 w-full overflow-hidden sm:h-24"
+      className="student-logo-ticker relative h-16 w-full overflow-hidden sm:h-20 md:h-24"
       aria-label="College partner logos"
     >
       <LogoLoop
         logos={collegeLogos}
-        speed={65}
+        speed={compact ? 48 : 65}
         direction="left"
-        logoHeight={48}
-        gap={112}
+        logoHeight={compact ? 36 : 48}
+        gap={compact ? 72 : 112}
         hoverSpeed={0}
         pauseOnHover
         fadeOut
-        fadeOutWidth={0.12}
+        fadeOutWidth={compact ? 0.08 : 0.12}
         muted={0}
         labels="none"
         ariaLabel="College partner logos"

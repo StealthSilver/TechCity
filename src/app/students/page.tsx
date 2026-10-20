@@ -18,7 +18,7 @@ export default function Students() {
     <main className="flex-1">
       <StudentHero />
 
-      <div className="-mt-6 pb-4 pt-2 sm:-mt-8 sm:pb-6 sm:pt-3">
+      <div className="-mt-4 pb-2 pt-1 sm:-mt-6 sm:pb-4 sm:pt-2 md:-mt-8 md:pb-6 md:pt-3">
         <CollegeLogoTicker />
       </div>
 
